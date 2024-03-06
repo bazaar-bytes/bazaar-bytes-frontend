@@ -3,6 +3,7 @@ import { ProductListPage } from "./pages/ProductListPage";
 import { Routes, Route } from "react-router-dom";
 import { SignupPage } from "./pages/SignupPage";
 import { LoginPage } from "./pages/LoginPage";
+import { EditProductPage } from "./pages/EditProductPage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<ProductListPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/products/:productId" element={<EditProductPage />} />
       </Routes>
     </>
   );
