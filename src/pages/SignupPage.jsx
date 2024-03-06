@@ -23,7 +23,7 @@ export const SignupPage = () => {
   return (
     <>
       <h1>SignUp</h1>
-      <form typeof="submit" onSubmit={handleSignupSubmit}>
+      <form onSubmit={handleSignupSubmit}>
         <label htmlFor="">Name:</label>
         <input
           type="text"
@@ -42,7 +42,7 @@ export const SignupPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button>Signup</button>
+        <button type="submit">Signup</button>
       </form>
     </>
   );
