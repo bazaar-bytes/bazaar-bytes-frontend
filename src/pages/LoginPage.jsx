@@ -42,7 +42,7 @@ export const LoginPage = () => {
         />
         <label htmlFor="">Password:</label>
         <input
-          type="text"
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="please enter your password"
