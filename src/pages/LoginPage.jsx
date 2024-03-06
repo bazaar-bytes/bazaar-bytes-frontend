@@ -1,10 +1,18 @@
 import { useState } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth.context";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
   const API_URL = "http://localhost:5005";
+
+  const { storeToken, authenticateUser } = useContext(AuthContext);
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -13,6 +21,9 @@ export const LoginPage = () => {
       .then((response) => {
         console.log(response);
         const token = response.data.authToken;
+        storeToken(token);
+        authenticateUser();
+        navigate("/");
       })
       .catch((error) => {
         console.error(error);
