@@ -17,7 +17,7 @@ function AuthProviderWrapper(props) {
 
   const authenticateUser = () => {
     const storedToken = localStorage.getItem("authToken");
-
+    console.log(storedToken);
     if (storedToken) {
       axios
         .get(`${API_URL}/auth/verify`, {
@@ -42,11 +42,29 @@ function AuthProviderWrapper(props) {
     }
   };
 
-  useEffect(() => {}, []);
+  const removeToken = () => {
+    localStorage.removeItem("authToken");
+  };
+
+  const logOutUser = () => {
+    removeToken();
+    authenticateUser();
+  };
+
+  useEffect(() => {
+    authenticateUser();
+  }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, isLoading, user, storeToken, authenticateUser }}
+      value={{
+        isLoggedIn,
+        isLoading,
+        user,
+        storeToken,
+        authenticateUser,
+        logOutUser,
+      }}
     >
       {props.children}
     </AuthContext.Provider>
