@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { DeleteModal } from "../components/DeleteModal";
 
 export const EditProductPage = () => {
   const { productId } = useParams();
@@ -30,7 +31,7 @@ export const EditProductPage = () => {
       setImage(response.data.image);
       setCategory(response.data.category);
     });
-  }, []);
+  }, [productId]);
 
   const handleEditSubmit = (e) => {
     const token = localStorage.getItem("authToken");
@@ -55,6 +56,16 @@ export const EditProductPage = () => {
         navigate("/");
       })
       .catch((error) => console.error(error));
+  };
+
+  const handleDelete = () => {
+    const token = localStorage.getItem("authToken");
+    axios
+      .delete(`${API_URL}/products/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => navigate(`/`))
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -112,11 +123,16 @@ export const EditProductPage = () => {
             Category
           </option>
           {categories.map((element) => {
-            return <option value={element}>{element}</option>;
+            return (
+              <option key={element.id} value={element}>
+                {element}
+              </option>
+            );
           })}
         </select>
 
         <button>Edit</button>
+        <DeleteModal deleteProduct={handleDelete} />
       </form>
     </>
   );

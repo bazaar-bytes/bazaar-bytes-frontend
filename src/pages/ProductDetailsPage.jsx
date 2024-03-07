@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 const API_URL = "http://localhost:5005";
 
 export const ProductDetailsPage = () => {
   const [product, setProduct] = useState(null);
-  console.log(product);
 
   const { productId } = useParams();
 
@@ -23,7 +22,7 @@ export const ProductDetailsPage = () => {
       {product === null ? (
         <h1>Loading...</h1>
       ) : (
-        <div className="card lg:card-side bg-base-100 border border-red-500">
+        <div className="card lg:card-side bg-base-100   md:w-2/3 xl:w-1/2 mx-auto">
           <figure>
             <img src={product.image} alt={product.name} />
           </figure>
@@ -31,8 +30,9 @@ export const ProductDetailsPage = () => {
             <h2 className="card-title">{product.name}</h2>
             <p>{product.description}</p>
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">Edit</button>
-              <button className="btn btn-primary">Delete</button>
+              <Link to={`/products/edit/${productId}`}>
+                <button className="btn btn-primary">Edit</button>
+              </Link>
             </div>
           </div>
         </div>
