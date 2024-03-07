@@ -17,19 +17,46 @@ export const Navbar = () => {
         </div>
 
         <div className="w-1/4 flex justify-end mr-4">
-          {isLoggedIn && (
-            <button className="btn btn-ghost text-xl" onClick={logOutUser}>
-              Log Out
-            </button>
-          )}
           {!isLoggedIn && (
-            <div className="flex">
+            <div>
               <Link to="/login">
                 <button className="btn btn-ghost text-xl">Log In</button>
               </Link>
               <Link to="/signup">
                 <button className="btn btn-ghost text-xl">Sign Up</button>
               </Link>
+            </div>
+          )}
+          {isLoggedIn && (
+            <div className="flex">
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div className="w-10 rounded-full">
+                    <img
+                      alt="Tailwind CSS Navbar component"
+                      src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                    />
+                  </div>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="text-black menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <a className="justify-between ">Your products</a>
+                  </li>
+
+                  <li>
+                    <Link to="/login" onClick={logOutUser}>
+                      Log Out
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           )}
         </div>
