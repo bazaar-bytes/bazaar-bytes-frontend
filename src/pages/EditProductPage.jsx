@@ -100,13 +100,6 @@ export const EditProductPage = () => {
             onChange={(e) => setImage(e.target.value)}
           />
         </label>
-
-        {/* <select className="select w-full max-w-xs">
-          <option>Category</option>
-          {category?.map((element) => {
-            return <option value={element}>{element}</option>;
-          })}
-        </select> */}
         <select className="select select-primary w-full max-w-xs">
           <option disabled selected>
             Category

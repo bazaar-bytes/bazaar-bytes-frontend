@@ -34,6 +34,7 @@ export const ProductCard = ({ product }) => {
           <p>{price}</p>
         </div>
       </div>
+      <button onClick={handleBuyClick}>Buy</button>
     </Link>
   );
 };

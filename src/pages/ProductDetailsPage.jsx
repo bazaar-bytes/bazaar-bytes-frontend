@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 const API_URL = "http://localhost:5005";
 
 export const ProductDetailsPage = () => {
   const [product, setProduct] = useState(null);
   console.log(product);
+  const navigate = useNavigate();
 
   const { productId } = useParams();
 
@@ -31,7 +32,7 @@ export const ProductDetailsPage = () => {
             <h2 className="card-title">{product.name}</h2>
             <p>{product.description}</p>
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">Edit</button>
+              <button onClick={} className="btn btn-primary">Edit</button>
               <button className="btn btn-primary">Delete</button>
             </div>
           </div>
