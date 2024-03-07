@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export const ProductCard = ({ product }) => {
-  const { name, image, description } = product;
+  const { _id, name, image, price } = product;
   const navigate = useNavigate();
 
   const API_URL = `http://localhost:5005`;
@@ -22,8 +22,6 @@ export const ProductCard = ({ product }) => {
         console.error(error);
       });
   };
-
-  const { _id, name, image, price } = product;
 
   return (
     <Link to={`/products/details/${_id}`} className="mx-auto">
