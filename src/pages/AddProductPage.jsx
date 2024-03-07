@@ -23,8 +23,6 @@ export const AddProductPage = () => {
     });
   };
 
-  console.log(product);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const token = localStorage.getItem("authToken");
@@ -39,7 +37,6 @@ export const AddProductPage = () => {
 
       .then((response) => {
         const newProduct = response.data;
-        console.log(newProduct);
 
         navigate(`/products/details/${newProduct._id}`);
       })
