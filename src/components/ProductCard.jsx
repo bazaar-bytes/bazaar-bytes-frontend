@@ -1,26 +1,30 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
 
 export const ProductCard = ({ product }) => {
   const { _id, name, image, price } = product;
-  const navigate = useNavigate();
+  const productId = product._id;
 
-  const API_URL = `http://localhost:5005`;
+  const { user } = useContext(AuthContext);
+
+  const API_URL = "http://localhost:5005";
 
   const handleBuyClick = () => {
-    const token = localStorage.getItem("auth");
+    const token = localStorage.getItem("authToken");
     axios
-      .post(`${API_URL}/api/orders`, product, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .post(
+        `${API_URL}/api/cart`,
+        { product: productId, user: user._id },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         console.log(response);
-        navigate("/buy");
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -33,8 +37,10 @@ export const ProductCard = ({ product }) => {
           <h2 className="card-title">{name}</h2>
           <p>{price}</p>
         </div>
+        <Link to={`/products/details/${_id}/buy`}>
+          <button onClick={handleBuyClick}>Buy</button>
+        </Link>
       </div>
-      <button onClick={handleBuyClick}>Buy</button>
     </Link>
   );
 };

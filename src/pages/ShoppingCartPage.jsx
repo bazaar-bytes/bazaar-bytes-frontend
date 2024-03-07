@@ -1,4 +1,28 @@
+import { useContext, useState, useEffect } from "react";
+
+import axios from "axios";
+import { AuthContext } from "../context/auth.context";
+
 export const ShoppingCartPage = () => {
+  let totalPrice = 0;
+
+  const API_URL = "http://localhost:5005";
+  const [cartItems, setCartItems] = useState();
+
+  const token = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log(response);
+        setCartItems(response.data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
     <body className="bg-gray-100">
       <div className="container mx-auto mt-10">
@@ -6,22 +30,23 @@ export const ShoppingCartPage = () => {
           <div className="w-3/4 bg-white px-10 py-10">
             <div className="flex justify-between border-b pb-8">
               <h1 className="font-semibold text-2xl">Shopping Cart</h1>
-              <h2 className="font-semibold text-2xl">3 Items</h2>
+              <h2 className="font-semibold text-2xl">{} Items</h2>
             </div>
             <div className="flex mt-10 mb-5">
               <h3 className="font-semibold text-gray-600 text-xs uppercase w-2/5">
                 Product Details
               </h3>
-              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">
+              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 ">
                 Quantity
               </h3>
-              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">
+              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 ">
                 Price
               </h3>
-              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">
+              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 ">
                 Total
               </h3>
             </div>
+
             <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
               <div className="flex w-2/5">
                 <div className="w-20">
@@ -32,8 +57,8 @@ export const ShoppingCartPage = () => {
                   />
                 </div>
                 <div className="flex flex-col justify-between ml-4 flex-grow">
-                  <span className="font-bold text-sm">Iphone 6S</span>
-                  <span className="text-red-500 text-xs">Apple</span>
+                  <span className="font-bold text-sm">{}</span>
+                  {/* <span className="text-red-500 text-xs">Apple</span> */}
                   <a
                     href="#"
                     className="font-semibold hover:text-red-500 text-gray-500 text-xs"
@@ -64,14 +89,14 @@ export const ShoppingCartPage = () => {
                 </svg>
               </div>
               <span className="text-center w-1/5 font-semibold text-sm">
-                $400.00
+                {}$
               </span>
               <span className="text-center w-1/5 font-semibold text-sm">
-                $400.00
+                ${}
               </span>
             </div>
 
-            <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
+            {/* <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
               <div className="flex w-2/5">
                 <div className="w-20">
                   <img
@@ -166,7 +191,7 @@ export const ShoppingCartPage = () => {
               <span className="text-center w-1/5 font-semibold text-sm">
                 $150.00
               </span>
-            </div>
+            </div> */}
 
             <a
               href="#"
@@ -200,7 +225,7 @@ export const ShoppingCartPage = () => {
             </div>
             <div className="py-10">
               <label
-                for="promo"
+                htmlFor="promo"
                 className="font-semibold inline-block mb-3 text-sm uppercase"
               >
                 Promo Code
