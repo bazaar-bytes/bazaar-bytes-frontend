@@ -20,7 +20,6 @@ export const LoginPage = () => {
     axios
       .post(`${API_URL}/auth/login`, { email, password })
       .then((response) => {
-        console.log(response);
         const token = response.data.authToken;
         storeToken(token);
         authenticateUser();

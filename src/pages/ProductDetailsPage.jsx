@@ -1,12 +1,19 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-
+import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 const API_URL = "http://localhost:5005";
 
 export const ProductDetailsPage = () => {
+  const { isLoggedIn, user } = useContext(AuthContext);
   const [product, setProduct] = useState(null);
+
+  const isOwner =
+    product !== null &&
+    user !== null &&
+    product.createdBy.toString() === user._id.toString();
+
+  console.log(isOwner);
 
   const { productId } = useParams();
 
@@ -32,9 +39,15 @@ export const ProductDetailsPage = () => {
             <h2 className="card-title">{product.name}</h2>
             <p>{product.description}</p>
             <div className="card-actions justify-end">
-              <Link to={`/products/edit/${productId}`}>
-                <button className="btn btn-primary">Edit</button>
-              </Link>
+              {isOwner ? (
+                <Link to={`/products/edit/${productId}`}>
+                  <button className="btn btn-primary">Edit</button>
+                </Link>
+              ) : (
+                <Link>
+                  <button className="btn btn-primary">Buy</button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

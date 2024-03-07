@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { DeleteModal } from "../components/DeleteModal";
+import { WarningAlert } from "../components/WarningAlert";
 
 export const EditProductPage = () => {
   const { productId } = useParams();
@@ -11,6 +12,8 @@ export const EditProductPage = () => {
   const [price, setPrice] = useState(0);
   const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [warningShown, setWarningShown] = useState(false);
 
   const categories = [
     "tech",
@@ -55,7 +58,13 @@ export const EditProductPage = () => {
         console.log(response.data);
         navigate("/");
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        setErrorMessage(error.response.data.message);
+        if (errorMessage && errorMessage.length > 1) {
+          setWarningShown(true);
+        }
+      });
   };
 
   const handleDelete = () => {
@@ -65,8 +74,16 @@ export const EditProductPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => navigate(`/`))
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        setErrorMessage(error.response.data.message);
+        if (errorMessage && errorMessage.length > 1) {
+          setWarningShown(true);
+        }
+      });
   };
+
+  console.log(errorMessage);
 
   return (
     <>
@@ -126,6 +143,12 @@ export const EditProductPage = () => {
 
         <button>Edit</button>
         <DeleteModal deleteProduct={handleDelete} />
+        {warningShown && (
+          <WarningAlert
+            errorMessage={errorMessage}
+            closeAlert={() => setWarningShown(false)}
+          />
+        )}
       </form>
     </>
   );
