@@ -7,6 +7,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { ProductDetailsPage } from "./pages/ProductDetailsPage";
 import { Navbar } from "./components/Navbar";
 import { EditProductPage } from "./pages/EditProductPage";
+import { ShoppingCartPage } from "./pages/ShoppingCartPage";
 
 function App() {
   return (

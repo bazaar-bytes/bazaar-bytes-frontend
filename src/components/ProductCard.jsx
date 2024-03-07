@@ -3,6 +3,26 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export const ProductCard = ({ product }) => {
+  const { name, image, description } = product;
+  const navigate = useNavigate();
+
+  const API_URL = `http://localhost:5005`;
+
+  const handleBuyClick = () => {
+    const token = localStorage.getItem("auth");
+    axios
+      .post(`${API_URL}/api/orders`, product, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log(response);
+        navigate("/buy");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const { _id, name, image, price } = product;
 
   return (
