@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
 
 const API_URL = "http://localhost:5005";
 
@@ -13,6 +14,7 @@ const defaultValues = {
 
 export const AddProductPage = () => {
   const [product, setProduct] = useState(defaultValues);
+  const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -28,6 +30,7 @@ export const AddProductPage = () => {
     const token = localStorage.getItem("authToken");
     const requestBody = {
       ...product,
+      createdBy: user._id,
     };
 
     axios
