@@ -2,11 +2,12 @@ import { useState } from "react";
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(undefined);
 
   const navigate = useNavigate();
 
@@ -26,7 +27,8 @@ export const LoginPage = () => {
         navigate("/");
       })
       .catch((error) => {
-        console.error(error);
+        const errorDescription = error.response.data.message;
+        setErrorMessage(errorDescription);
       });
   };
   return (
@@ -38,7 +40,7 @@ export const LoginPage = () => {
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="please enter your name"
+          placeholder="please enter your email"
         />
         <label htmlFor="">Password:</label>
         <input
@@ -47,8 +49,12 @@ export const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="please enter your password"
         />
-        <button>Login</button>
+        <button type="submit">Login</button>
       </form>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+      <p>Don't have an account yet?</p>
+      <Link to={"/signup"}> Sign Up</Link>
     </>
   );
 };
