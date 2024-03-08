@@ -10,6 +10,7 @@ import { EditProductPage } from "./pages/EditProductPage";
 import { IsPrivate } from "./components/IsPrivate";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
 import { ShippingDetailsPage } from "./pages/ShippingDetailsPage";
+import { Dashboard } from "./pages/Dashboard";
 
 function App() {
   return (
@@ -54,6 +55,22 @@ function App() {
             element={
               <IsPrivate>
                 <EditProductPage />
+              </IsPrivate>
+            }
+          />
+          <Route
+            path="/my-dashboard"
+            element={
+              <IsPrivate>
+                <Dashboard />
+              </IsPrivate>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <IsPrivate>
+                <ShoppingCartPage />
               </IsPrivate>
             }
           />
