@@ -1,29 +1,33 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
+import { SearchBar } from "./SearchBar";
 
 export const Navbar = () => {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);
 
   return (
-    <div className=" bg-primary text-primary-content">
+    <div className=" bg-indigo-600 text-primary-content">
       <div className="flex justify-between h-20 items-center px-4">
-        <div className="flex items-center space-x-2 w-1/4">
-          <button className="flex items-center text-l py-1">☰</button>
-        </div>
+        <Link to="/">
+          <h1 className="text-2xl">BazaarBytes</h1>
+        </Link>
 
-        <div className="flex justify-center w-1/2">
-          <h1>BazaarBytes</h1>
-        </div>
-
-        <div className="w-1/4 flex justify-end mr-4">
+        <div className="w-1/4 flex justify-end mr-4 gap-6 items-center ">
+          {/* <SearchBar /> */}
           {!isLoggedIn && (
-            <div>
-              <Link to="/login">
-                <button className="btn btn-ghost text-xl">Log In</button>
+            <div className="flex gap-6">
+              <Link
+                to="/login"
+                className="text-nowrap text-sm font-bold hover:opacity-60"
+              >
+                Log In
               </Link>
-              <Link to="/signup">
-                <button className="btn btn-ghost text-xl">Sign Up</button>
+              <Link
+                to="/signup"
+                className="text-nowrap text-sm font-bold hover:opacity-60"
+              >
+                Sign Up
               </Link>
             </div>
           )}
@@ -47,11 +51,13 @@ export const Navbar = () => {
                   className="text-black menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
                 >
                   <li>
-                    <a className="justify-between ">Your products</a>
+                    <Link to="/my-dashboard" className="justify-between ">
+                      My products
+                    </Link>
                   </li>
 
                   <li>
-                    <Link to="/login" onClick={logOutUser}>
+                    <Link to="/" onClick={logOutUser}>
                       Log Out
                     </Link>
                   </li>
