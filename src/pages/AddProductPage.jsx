@@ -12,6 +12,15 @@ const defaultValues = {
   price: "",
 };
 
+const categories = [
+  "tech",
+  "clothes",
+  "furniture",
+  "collectibles",
+  "books",
+  "vehicles",
+];
+
 export const AddProductPage = () => {
   const [product, setProduct] = useState(defaultValues);
   const { user } = useContext(AuthContext);
@@ -75,17 +84,6 @@ export const AddProductPage = () => {
             />
           </label>
           <label className="input input-bordered flex items-center gap-2">
-            Image
-            <input
-              type="text"
-              className="grow"
-              placeholder="https://example.com"
-              value={product.image}
-              onChange={handleChange}
-              name="image"
-            />
-          </label>
-          <label className="input input-bordered flex items-center gap-2">
             Price
             <input
               type="number"
@@ -96,6 +94,30 @@ export const AddProductPage = () => {
               name="price"
             />
           </label>
+          <label className="input input-bordered flex items-center gap-2">
+            Image
+            <input
+              type="text"
+              className="grow"
+              placeholder="https://example.com"
+              value={product.image}
+              onChange={handleChange}
+              name="image"
+            />
+          </label>
+          <select className="select select-primary w-full max-w-xs">
+            <option disabled selected>
+              Category
+            </option>
+            {categories.map((element) => {
+              return (
+                <option key={element.id} value={element}>
+                  {element}
+                </option>
+              );
+            })}
+          </select>
+
           <button className="btn btn-active mx-auto">Add Product</button>
         </div>
       </form>
