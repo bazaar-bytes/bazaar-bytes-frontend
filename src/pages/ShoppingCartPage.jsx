@@ -60,7 +60,6 @@ export const ShoppingCartPage = () => {
     const VAT = calculateVAT();
     return subtotal > 0 ? subtotal + VAT + shipping : subtotal + VAT;
   };
-  const handleCheckoutClick = () => {};
 
   const handleDeleteClick = (item) => {
     axios
