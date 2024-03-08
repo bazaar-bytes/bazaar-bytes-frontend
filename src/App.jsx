@@ -8,6 +8,8 @@ import { ProductDetailsPage } from "./pages/ProductDetailsPage";
 import { Navbar } from "./components/Navbar";
 import { EditProductPage } from "./pages/EditProductPage";
 import { IsPrivate } from "./components/IsPrivate";
+import { ShoppingCartPage } from "./pages/ShoppingCartPage";
+import { ShippingDetailsPage } from "./pages/ShippingDetailsPage";
 
 function App() {
   return (
@@ -26,7 +28,22 @@ function App() {
               </IsPrivate>
             }
           />
-          <Route path="/products/details/:productId/buy" />
+          <Route
+            path="/products/details/:productId/buy"
+            element={
+              <IsPrivate>
+                <ShoppingCartPage />
+              </IsPrivate>
+            }
+          />
+          <Route
+            path="/products/details/:productId/buy/shipping"
+            element={
+              <IsPrivate>
+                <ShippingDetailsPage />
+              </IsPrivate>
+            }
+          />
           <Route
             path="/products/details/:productId"
             element={<ProductDetailsPage />}

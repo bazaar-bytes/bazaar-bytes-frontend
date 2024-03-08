@@ -1,15 +1,16 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
-import { AuthContext } from "../context/auth.context";
 
 export const ShoppingCartPage = () => {
-  let totalPrice = 0;
-
-  const API_URL = "http://localhost:5005";
   const [cartItems, setCartItems] = useState();
-
+  const API_URL = "http://localhost:5005";
   const token = localStorage.getItem("authToken");
+
+  const shipping = 20;
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -17,241 +18,185 @@ export const ShoppingCartPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response);
-        setCartItems(response.data);
+        setCartItems(response.data.map((item) => ({ ...item, quantity: 1 })));
       })
       .catch((error) => console.error(error));
   }, []);
 
+  const handleDecrementClick = (index) => {
+    setCartItems((prevCartItems) => {
+      const updatedCartItems = [...prevCartItems];
+      if (updatedCartItems[index].quantity >= 1) {
+        updatedCartItems[index].quantity -= 1;
+      }
+      return updatedCartItems;
+    });
+  };
+
+  const handleIncrementClick = (index) => {
+    setCartItems((prevCartItems) => {
+      const updatedCartItems = [...prevCartItems];
+      console.log("item", updatedCartItems[index]);
+      updatedCartItems[index].quantity += 1;
+      return updatedCartItems;
+    });
+  };
+
+  const calculateSubtotal = () => {
+    if (!cartItems) return 0;
+    return cartItems.reduce((total, item) => {
+      return total + item.product.price * item.quantity;
+    }, 0);
+  };
+
+  const calculateVAT = () => {
+    const VATRate = 0.16;
+    return calculateSubtotal() * VATRate;
+  };
+
+  const calculateTotal = () => {
+    if (!cartItems) return 0;
+    const subtotal = calculateSubtotal();
+    const VAT = calculateVAT();
+    return subtotal > 0 ? subtotal + VAT + shipping : subtotal + VAT;
+  };
+  const handleCheckoutClick = () => {};
+
+  const handleDeleteClick = (item) => {
+    axios
+      .delete(`${API_URL}/api/cart/${item._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => {
+        axios
+          .get(`${API_URL}/api/cart`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            setCartItems(
+              response.data.map((item) => ({ ...item, quantity: 1 }))
+            );
+          })
+          .catch((error) => console.error(error));
+      })
+      .catch((error) => console.error(error));
+  };
+
+  if (cartItems === null) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <body className="bg-gray-100">
-      <div className="container mx-auto mt-10">
-        <div className="flex shadow-md my-10">
-          <div className="w-3/4 bg-white px-10 py-10">
-            <div className="flex justify-between border-b pb-8">
-              <h1 className="font-semibold text-2xl">Shopping Cart</h1>
-              <h2 className="font-semibold text-2xl">{} Items</h2>
+    <div className="bg-gray-100 py-8">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between border-b pb-8">
+          <h1 className="font-semibold text-2xl text-center">Shopping Cart</h1>
+          <h2 className="font-semibold text-2xl">
+            {cartItems && cartItems.length} Items
+          </h2>
+        </div>
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="md:w-3/4">
+            <div className="bg-white rounded-lg shadow-md p-6 mb-4">
+              <table className="w-full">
+                <thead>
+                  <tr>
+                    <th className="text-center font-semibold">Product</th>
+                    <th className="text-center font-semibold">Price</th>
+                    <th className="text-center font-semibold">Quantity</th>
+                    <th className="text-center font-semibold">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cartItems &&
+                    cartItems.map((item, index) => {
+                      return (
+                        <tr key={item._id}>
+                          <td className="py-4 border-t-4 ">
+                            <div className="flex items-center">
+                              <img
+                                className="h-16 w-16 mr-4"
+                                src={item.product.image}
+                                alt="Product image"
+                              />
+                              <span className="font-semibold">
+                                {item.product.name}
+                              </span>
+                              <span className="mx-4">
+                                {" "}
+                                <button onClick={() => handleDeleteClick(item)}>
+                                  delete
+                                </button>
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4">${item.product.price}</td>
+                          <td className="py-4">
+                            <div className="flex items-center">
+                              <button
+                                onClick={() => handleDecrementClick(index)}
+                                className="border rounded-md py-2 px-4 mr-2"
+                              >
+                                -
+                              </button>
+                              <span className="text-center w-8">
+                                {item.quantity}
+                              </span>
+                              <button
+                                onClick={() => handleIncrementClick(index)}
+                                className="border rounded-md py-2 px-4 ml-2"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </td>
+                          <td className="py-4">
+                            ${item.quantity * item.product.price}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
             </div>
-            <div className="flex mt-10 mb-5">
-              <h3 className="font-semibold text-gray-600 text-xs uppercase w-2/5">
-                Product Details
-              </h3>
-              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 ">
-                Quantity
-              </h3>
-              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 ">
-                Price
-              </h3>
-              <h3 className="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 ">
-                Total
-              </h3>
-            </div>
-
-            <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
-              <div className="flex w-2/5">
-                <div className="w-20">
-                  <img
-                    className="h-24"
-                    src="https://drive.google.com/uc?id=18KkAVkGFvaGNqPy2DIvTqmUH_nk39o3z"
-                    alt=""
-                  />
-                </div>
-                <div className="flex flex-col justify-between ml-4 flex-grow">
-                  <span className="font-bold text-sm">{}</span>
-                  {/* <span className="text-red-500 text-xs">Apple</span> */}
-                  <a
-                    href="#"
-                    className="font-semibold hover:text-red-500 text-gray-500 text-xs"
-                  >
-                    Remove
-                  </a>
-                </div>
-              </div>
-              <div className="flex justify-center w-1/5">
-                <svg
-                  className="fill-current text-gray-600 w-3"
-                  viewBox="0 0 448 512"
-                >
-                  <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                </svg>
-
-                <input
-                  className="mx-2 border text-center w-8"
-                  type="text"
-                  value="1"
-                />
-
-                <svg
-                  className="fill-current text-gray-600 w-3"
-                  viewBox="0 0 448 512"
-                >
-                  <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                </svg>
-              </div>
-              <span className="text-center w-1/5 font-semibold text-sm">
-                {}$
-              </span>
-              <span className="text-center w-1/5 font-semibold text-sm">
-                ${}
-              </span>
-            </div>
-
-            {/* <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
-              <div className="flex w-2/5">
-                <div className="w-20">
-                  <img
-                    className="h-24"
-                    src="https://drive.google.com/uc?id=10ht6a9IR3K2i1j0rHofp9-Oubl1Chraw"
-                    alt=""
-                  />
-                </div>
-                <div className="flex flex-col justify-between ml-4 flex-grow">
-                  <span className="font-bold text-sm">Xiaomi Mi 20000mAh</span>
-                  <span className="text-red-500 text-xs">Xiaomi</span>
-                  <a
-                    href="#"
-                    className="font-semibold hover:text-red-500 text-gray-500 text-xs"
-                  >
-                    Remove
-                  </a>
-                </div>
-              </div>
-              <div className="flex justify-center w-1/5">
-                <svg
-                  className="fill-current text-gray-600 w-3"
-                  viewBox="0 0 448 512"
-                >
-                  <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                </svg>
-
-                <input
-                  className="mx-2 border text-center w-8"
-                  type="text"
-                  value="1"
-                />
-
-                <svg
-                  className="fill-current text-gray-600 w-3"
-                  viewBox="0 0 448 512"
-                >
-                  <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                </svg>
-              </div>
-              <span className="text-center w-1/5 font-semibold text-sm">
-                $40.00
-              </span>
-              <span className="text-center w-1/5 font-semibold text-sm">
-                $40.00
-              </span>
-            </div>
-
-            <div className="flex items-center hover:bg-gray-100 -mx-8 px-6 py-5">
-              <div className="flex w-2/5">
-                <div className="w-20">
-                  <img
-                    className="h-24"
-                    src="https://drive.google.com/uc?id=1vXhvO9HoljNolvAXLwtw_qX3WNZ0m75v"
-                    alt=""
-                  />
-                </div>
-                <div className="flex flex-col justify-between ml-4 flex-grow">
-                  <span className="font-bold text-sm">Airpods</span>
-                  <span className="text-red-500 text-xs">Apple</span>
-                  <a
-                    href="#"
-                    className="font-semibold hover:text-red-500 text-gray-500 text-xs"
-                  >
-                    Remove
-                  </a>
-                </div>
-              </div>
-              <div className="flex justify-center w-1/5">
-                <svg
-                  className="fill-current text-gray-600 w-3"
-                  viewBox="0 0 448 512"
-                >
-                  <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                </svg>
-                <input
-                  className="mx-2 border text-center w-8"
-                  type="text"
-                  value="1"
-                />
-
-                <svg
-                  className="fill-current text-gray-600 w-3"
-                  viewBox="0 0 448 512"
-                >
-                  <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                </svg>
-              </div>
-              <span className="text-center w-1/5 font-semibold text-sm">
-                $150.00
-              </span>
-              <span className="text-center w-1/5 font-semibold text-sm">
-                $150.00
-              </span>
-            </div> */}
-
-            <a
-              href="#"
-              className="flex font-semibold text-indigo-600 text-sm mt-10"
-            >
-              <svg
-                className="fill-current mr-2 text-indigo-600 w-4"
-                viewBox="0 0 448 512"
-              >
-                <path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" />
-              </svg>
-              Continue Shopping
-            </a>
           </div>
-
-          <div id="summary" className="w-1/4 px-8 py-10">
-            <h1 className="font-semibold text-2xl border-b pb-8">
-              Order Summary
-            </h1>
-            <div className="flex justify-between mt-10 mb-5">
-              <span className="font-semibold text-sm uppercase">Items 3</span>
-              <span className="font-semibold text-sm">590$</span>
-            </div>
-            <div>
-              <label className="font-medium inline-block mb-3 text-sm uppercase">
-                Shipping
-              </label>
-              <select className="block p-2 text-gray-600 w-full text-sm">
-                <option>Standard shipping - $10.00</option>
-              </select>
-            </div>
-            <div className="py-10">
-              <label
-                htmlFor="promo"
-                className="font-semibold inline-block mb-3 text-sm uppercase"
-              >
-                Promo Code
-              </label>
-              <input
-                type="text"
-                id="promo"
-                placeholder="Enter your code"
-                className="p-2 text-sm w-full"
-              />
-            </div>
-            <button className="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">
-              Apply
-            </button>
-            <div className="border-t mt-8">
-              <div className="flex font-semibold justify-between py-6 text-sm uppercase">
-                <span>Total cost</span>
-                <span>$600</span>
+          <div className="md:w-1/4">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-lg font-semibold mb-4">Summary</h2>
+              <div className="flex justify-between mb-2">
+                <span>Subtotal</span>
+                <span>${calculateSubtotal()}</span>
               </div>
-              <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
+
+              <div className="flex justify-between mb-2">
+                <span>Taxes(16%)</span>
+                <span>${calculateVAT()}</span>
+              </div>
+
+              <div className="flex justify-between mb-2">
+                <span>Shipping</span>
+                <span>${shipping}</span>
+              </div>
+              <hr className="my-2" />
+              <div className="flex justify-between mb-2">
+                <span className="font-semibold">Total</span>
+                <span className="font-semibold">${calculateTotal()}</span>
+              </div>
+              <button
+                onClick={() =>
+                  navigate("/products/details/:productId/buy/shipping")
+                }
+                className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full"
+              >
                 Checkout
               </button>
             </div>
           </div>
         </div>
       </div>
-    </body>
+      <div className="text-left mx-12">
+        <button onClick={() => navigate("/")}>Continue shopping</button>
+      </div>
+    </div>
   );
 };

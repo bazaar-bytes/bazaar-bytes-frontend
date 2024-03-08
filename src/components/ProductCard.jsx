@@ -21,9 +21,7 @@ export const ProductCard = ({ product }) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) => {
-        console.log(response);
-      })
+      .then((response) => {})
       .catch((error) => console.error(error));
   };
 
