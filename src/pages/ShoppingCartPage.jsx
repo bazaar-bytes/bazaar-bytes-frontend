@@ -81,6 +81,18 @@ export const ShoppingCartPage = () => {
       .catch((error) => console.error(error));
   };
 
+  const handleCheckoutClick = () => {
+    axios
+      .post(`${API_URL}/api/create-checkout-session`, cartItems, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log(response);
+        window.location = response.data.url;
+      })
+      .catch((error) => console.error(error));
+  };
+
   if (cartItems === null) {
     return <div>Loading...</div>;
   }
@@ -181,11 +193,11 @@ export const ShoppingCartPage = () => {
                 <span className="font-semibold">Total</span>
                 <span className="font-semibold">${calculateTotal()}</span>
               </div>
+
               <button
-                onClick={() =>
-                  navigate("/products/details/:productId/buy/shipping")
-                }
+                onClick={handleCheckoutClick}
                 className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full"
+                type="submit"
               >
                 Checkout
               </button>

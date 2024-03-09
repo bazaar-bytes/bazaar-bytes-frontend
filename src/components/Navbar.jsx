@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
-import { SearchBar } from "./SearchBar";
 
 export const Navbar = () => {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);

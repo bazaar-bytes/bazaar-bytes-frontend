@@ -9,7 +9,6 @@ import { Navbar } from "./components/Navbar";
 import { EditProductPage } from "./pages/EditProductPage";
 import { IsPrivate } from "./components/IsPrivate";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
-import { ShippingDetailsPage } from "./pages/ShippingDetailsPage";
 import { Dashboard } from "./pages/Dashboard";
 
 function App() {
@@ -37,14 +36,7 @@ function App() {
               </IsPrivate>
             }
           />
-          <Route
-            path="/products/details/:productId/buy/shipping"
-            element={
-              <IsPrivate>
-                <ShippingDetailsPage />
-              </IsPrivate>
-            }
-          />
+
           <Route
             path="/products/details/:productId"
             element={<ProductDetailsPage />}
