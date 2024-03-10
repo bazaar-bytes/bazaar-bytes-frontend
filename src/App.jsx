@@ -10,6 +10,7 @@ import { EditProductPage } from "./pages/EditProductPage";
 import { IsPrivate } from "./components/IsPrivate";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
 import { Dashboard } from "./pages/Dashboard";
+import { PaymentSuccess } from "./pages/PaymentSuccess";
 
 function App() {
   return (
@@ -36,7 +37,14 @@ function App() {
               </IsPrivate>
             }
           />
-
+          <Route
+            path="/payment/success"
+            element={
+              <IsPrivate>
+                <PaymentSuccess />
+              </IsPrivate>
+            }
+          />
           <Route
             path="/products/details/:productId"
             element={<ProductDetailsPage />}
