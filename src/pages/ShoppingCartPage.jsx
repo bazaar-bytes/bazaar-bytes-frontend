@@ -49,16 +49,11 @@ export const ShoppingCartPage = () => {
     }, 0);
   };
 
-  const calculateVAT = () => {
-    const VATRate = 0.16;
-    return calculateSubtotal() * VATRate;
-  };
-
   const calculateTotal = () => {
     if (!cartItems) return 0;
     const subtotal = calculateSubtotal();
-    const VAT = calculateVAT();
-    return subtotal > 0 ? subtotal + VAT + shipping : subtotal + VAT;
+
+    return subtotal > 0 ? subtotal + shipping : subtotal;
   };
 
   const handleDeleteClick = (item) => {
@@ -178,12 +173,6 @@ export const ShoppingCartPage = () => {
                 <span>Subtotal</span>
                 <span>${calculateSubtotal()}</span>
               </div>
-
-              <div className="flex justify-between mb-2">
-                <span>Taxes(16%)</span>
-                <span>${calculateVAT()}</span>
-              </div>
-
               <div className="flex justify-between mb-2">
                 <span>Shipping</span>
                 <span>${shipping}</span>
