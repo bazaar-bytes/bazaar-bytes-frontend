@@ -18,6 +18,7 @@ export const ShoppingCartPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
+        console.log(response.data.length);
         setCartItems(response.data.map((item) => ({ ...item, quantity: 1 })));
       })
       .catch((error) => console.error(error));

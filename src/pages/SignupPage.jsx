@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../context/auth.context";
 
 export const SignupPage = () => {
   const [name, setName] = useState("");
@@ -9,13 +10,18 @@ export const SignupPage = () => {
   const navigate = useNavigate();
   const API_URL = "http://localhost:5005";
 
+  const { storeToken, authenticateUser } = useContext(AuthContext);
+
   const handleSignupSubmit = (e) => {
     e.preventDefault();
     axios
       .post(`${API_URL}/auth/signup`, { name, email, password })
       .then((response) => {
         console.log(response);
-        navigate("/login");
+        const token = response.data.authToken;
+        storeToken(token);
+        authenticateUser();
+        navigate("/");
       })
       .catch((error) => console.error(error));
   };
