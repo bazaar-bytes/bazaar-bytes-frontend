@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
+import { SearchBar } from "./SearchBar";
 
-export const Navbar = () => {
+export const Navbar = ({ query, setQuery }) => {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);
 
   return (
@@ -13,7 +14,7 @@ export const Navbar = () => {
         </Link>
 
         <div className="w-1/4 flex justify-end mr-4 gap-6 items-center ">
-          {/* <SearchBar /> */}
+          <SearchBar query={query} setQuery={setQuery} />
           {!isLoggedIn && (
             <div className="flex gap-6">
               <Link

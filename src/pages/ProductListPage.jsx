@@ -1,20 +1,23 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { ProductCard } from "../components/ProductCard";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import { ProductsContext } from "../context/products.context";
 
 export const ProductListPage = () => {
   const API_URL = "http://localhost:5005";
   const { user } = useContext(AuthContext);
 
-  const [products, setProducts] = useState(null);
+  const { pathname } = useLocation();
+
+  const { products, setProducts } = useContext(ProductsContext);
 
   useEffect(() => {
     axios.get(`${API_URL}/api/products`).then((response) => {
       setProducts(response.data);
     });
-  }, []);
+  }, [setProducts]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -36,7 +39,11 @@ export const ProductListPage = () => {
           <h1>Loading...</h1>
         ) : (
           products.map((product) => (
-            <ProductCard key={product._id} product={product} />
+            <ProductCard
+              key={product._id}
+              product={product}
+              isPublic={pathname === "/"}
+            />
           ))
         )}
       </div>
