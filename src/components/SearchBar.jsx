@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { ProductsContext } from "../context/products.context";
-import { API_URL } from "../App";
+import { API_URL } from "../App.jsx";
 
 export const SearchBar = () => {
   const [query, setQuery] = useState("");
