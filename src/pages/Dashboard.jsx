@@ -1,14 +1,15 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { ProductCard } from "../components/ProductCard";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import { ProductsContext } from "../context/products.context";
 
 export const Dashboard = () => {
   const API_URL = "http://localhost:5005";
   const { user } = useContext(AuthContext);
 
-  const [products, setProducts] = useState(null);
+  const { products, setProducts } = useContext(ProductsContext);
   console.log(user);
 
   useEffect(() => {
