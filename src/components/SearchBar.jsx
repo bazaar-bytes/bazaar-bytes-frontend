@@ -1,13 +1,11 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { ProductsContext } from "../context/products.context";
-import { API_URL } from "../App";
+import { API_URL } from "../pages/ProductListPage";
 
 export const SearchBar = () => {
   const [query, setQuery] = useState("");
-  // const [searchResult, setSearchResult] = useState(null);
   const { setProducts } = useContext(ProductsContext);
-  console.log(query);
 
   useEffect(() => {
     console.log(query);
@@ -34,13 +32,6 @@ export const SearchBar = () => {
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
-      {/* {searchResult && searchResult.length > 0 && (
-        <div className="bg-white">
-          {searchResult.map((product) => (
-            <div key={product._id}>{product.name}</div>
-          ))}
-        </div>
-      )} */}
     </div>
   );
 };
