@@ -4,9 +4,9 @@ import { ProductCard } from "../components/ProductCard";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import { ProductsContext } from "../context/products.context";
+import { API_URL } from "./ProductListPage";
 
 export const Dashboard = () => {
-  const API_URL = "http://localhost:5005";
   const { user } = useContext(AuthContext);
 
   const { products, setProducts } = useContext(ProductsContext);

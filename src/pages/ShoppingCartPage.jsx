@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/auth.context";
+import { API_URL } from "./ProductListPage";
 
 export const ShoppingCartPage = () => {
   const [cartItems, setCartItems] = useState();
-  const API_URL = "http://localhost:5005";
   const token = localStorage.getItem("authToken");
 
   const shipping = 20;

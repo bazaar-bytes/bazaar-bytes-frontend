@@ -2,13 +2,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/auth.context";
+import { API_URL } from "./ProductListPage";
 
 export const SignupPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const API_URL = "http://localhost:5005";
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
 
