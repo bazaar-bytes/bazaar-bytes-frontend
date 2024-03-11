@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import axios from "axios";
-import { AuthContext } from "../context/auth.context";
 import { API_URL } from "./ProductListPage";
 
 export const ShoppingCartPage = () => {
@@ -12,7 +10,6 @@ export const ShoppingCartPage = () => {
   const shipping = 20;
 
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -20,7 +17,6 @@ export const ShoppingCartPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response.data.length);
         setCartItems(response.data.map((item) => ({ ...item, quantity: 1 })));
       })
       .catch((error) => console.error(error));
@@ -39,7 +35,6 @@ export const ShoppingCartPage = () => {
   const handleIncrementClick = (index) => {
     setCartItems((prevCartItems) => {
       const updatedCartItems = [...prevCartItems];
-      console.log("item", updatedCartItems[index]);
       updatedCartItems[index].quantity += 1;
       return updatedCartItems;
     });
@@ -85,7 +80,6 @@ export const ShoppingCartPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response);
         window.location = response.data.url;
         return axios.delete(`${API_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -114,10 +108,10 @@ export const ShoppingCartPage = () => {
               <table className="w-full">
                 <thead>
                   <tr>
-                    <th className="text-center font-semibold">Product</th>
-                    <th className="text-center font-semibold">Price</th>
-                    <th className="text-center font-semibold">Quantity</th>
-                    <th className="text-center font-semibold">Total</th>
+                    <th className="text-center font-semibold ">Product</th>
+                    <th className="text-center font-semibold ">Price</th>
+                    <th className="text-center font-semibold ">Quantity</th>
+                    <th className="text-center font-semibold ">Total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -126,7 +120,7 @@ export const ShoppingCartPage = () => {
                       return (
                         <tr key={item._id}>
                           <td className="py-4 border-t-4 ">
-                            <div className="flex items-center">
+                            <div className="flex justify-between items-center">
                               <img
                                 className="h-16 w-16 mr-4"
                                 src={item.product.image}
@@ -135,10 +129,28 @@ export const ShoppingCartPage = () => {
                               <span className="font-semibold">
                                 {item.product.name}
                               </span>
-                              <span className="mx-4">
-                                {" "}
-                                <button onClick={() => handleDeleteClick(item)}>
-                                  delete
+
+                              <span className="">
+                                {""}
+
+                                <button
+                                  className=""
+                                  onClick={() => handleDeleteClick(item)}
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-6 h-6"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                    />
+                                  </svg>
                                 </button>
                               </span>
                             </div>
