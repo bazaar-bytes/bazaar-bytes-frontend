@@ -3,6 +3,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "./ProductListPage";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -10,8 +11,6 @@ export const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState(undefined);
 
   const navigate = useNavigate();
-
-  const API_URL = "http://localhost:5005";
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
 

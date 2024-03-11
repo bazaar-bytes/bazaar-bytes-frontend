@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { DeleteModal } from "../components/DeleteModal";
 import { WarningAlert } from "../components/WarningAlert";
+import { API_URL } from "./ProductListPage";
 
 export const EditProductPage = () => {
   const { productId } = useParams();
@@ -23,8 +24,6 @@ export const EditProductPage = () => {
     "books",
     "vehicles",
   ];
-
-  const API_URL = "http://localhost:5005/api";
 
   useEffect(() => {
     axios.get(`${API_URL}/products/${productId}`).then((response) => {

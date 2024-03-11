@@ -2,11 +2,10 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
-
-const API_URL = "http://localhost:5005";
+import { API_URL } from "./ProductListPage";
 
 export const ProductDetailsPage = () => {
-  const { isLoggedIn, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [product, setProduct] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
 

@@ -2,8 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
-
-const API_URL = "http://localhost:5005";
+import { API_URL } from "./ProductListPage";
 
 const defaultValues = {
   name: "",

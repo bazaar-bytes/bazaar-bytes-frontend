@@ -1,12 +1,13 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { ProductCard } from "../components/ProductCard";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import { ProductsContext } from "../context/products.context";
 
+export const API_URL = "http://localhost:5005";
+
 export const ProductListPage = () => {
-  const API_URL = "http://localhost:5005";
   const { user } = useContext(AuthContext);
 
   const { pathname } = useLocation();
