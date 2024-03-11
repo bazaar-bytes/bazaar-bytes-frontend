@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useContext } from "react";
 import axios from "axios";
+import { AuthContext } from "../context/auth.context";
 
 export const ShoppingCartPage = () => {
   const [cartItems, setCartItems] = useState();
@@ -11,6 +12,7 @@ export const ShoppingCartPage = () => {
   const shipping = 20;
 
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -85,7 +87,11 @@ export const ShoppingCartPage = () => {
       .then((response) => {
         console.log(response);
         window.location = response.data.url;
+        return axios.delete(`${API_URL}/api/cart`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       })
+      .catch((error) => console.error(error))
       .catch((error) => console.error(error));
   };
 

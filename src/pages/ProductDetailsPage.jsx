@@ -11,7 +11,6 @@ export const ProductDetailsPage = () => {
   const [isOwner, setIsOwner] = useState(false);
 
   const { productId } = useParams();
-  console.log(product);
 
   const handleBuyClick = () => {
     const token = localStorage.getItem("authToken");
