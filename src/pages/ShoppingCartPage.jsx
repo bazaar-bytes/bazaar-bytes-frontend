@@ -190,13 +190,15 @@ export const ShoppingCartPage = () => {
                 <span className="font-semibold">${calculateTotal()}</span>
               </div>
 
-              <button
-                onClick={handleCheckoutClick}
-                className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full"
-                type="submit"
-              >
-                Checkout
-              </button>
+              {cartItems && cartItems.length > 0 && (
+                <button
+                  onClick={handleCheckoutClick}
+                  className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full"
+                  type="submit"
+                >
+                  Checkout
+                </button>
+              )}
             </div>
           </div>
         </div>
