@@ -5,8 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import { ProductsContext } from "../context/products.context";
 
-export const API_URL = "http://localhost:5005";
-
 export const ProductListPage = () => {
   const { user } = useContext(AuthContext);
 
@@ -15,16 +13,29 @@ export const ProductListPage = () => {
   const { products, setProducts } = useContext(ProductsContext);
 
   useEffect(() => {
-    axios.get(`${API_URL}/api/products`).then((response) => {
-      setProducts(response.data);
-    });
-  }, [setProducts]);
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/products`)
+      .then((response) => {
+        setProducts(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the products:", error);
+      });
+  }, []);
+
+  const ownedProducts = products?.filter(
+    (product) => product.createdBy?._id === user?._id
+  );
+
+  const allProducts = products?.filter(
+    (product) => product.createdBy?._id !== user?._id
+  );
 
   return (
     <div className="flex flex-col gap-8">
       {user && (
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900">
             Welcome, {user.name}!
           </h2>
           <Link to="/products/add">
@@ -35,17 +46,30 @@ export const ProductListPage = () => {
         </div>
       )}
 
-      <div className="grid gap-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 2xl:grid-cols-6">
+      <div>
         {products === null ? (
           <h1>Loading...</h1>
         ) : (
-          products.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              isPublic={pathname === "/"}
-            />
-          ))
+          <div className="flex flex-col gap-4">
+            <h1 className="text-left font-bold text-2xl">Explore</h1>
+
+            <div className="grid gap-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 2xl:grid-cols-6">
+              {allProducts.map((product) => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  isPublic={pathname === "/"}
+                />
+              ))}
+            </div>
+            <h1 className="text-left font-bold text-2xl">Your products</h1>
+
+            <div className="grid gap-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 2xl:grid-cols-6">
+              {ownedProducts.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>

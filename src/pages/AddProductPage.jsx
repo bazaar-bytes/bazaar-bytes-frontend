@@ -2,7 +2,6 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
-import { API_URL } from "./ProductListPage";
 
 const defaultValues = {
   name: "",
@@ -42,7 +41,7 @@ export const AddProductPage = () => {
     };
 
     axios
-      .post(`${API_URL}/api/products`, requestBody, {
+      .post(`${import.meta.env.VITE_API_URL}/api/products`, requestBody, {
         headers: { Authorization: `Bearer ${token}` },
       })
 

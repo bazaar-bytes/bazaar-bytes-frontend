@@ -3,7 +3,6 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "./ProductListPage";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +16,7 @@ export const LoginPage = () => {
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${API_URL}/auth/login`, { email, password })
+      .post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password })
       .then((response) => {
         const token = response.data.authToken;
         storeToken(token);

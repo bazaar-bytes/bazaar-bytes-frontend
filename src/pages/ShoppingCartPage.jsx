@@ -1,14 +1,13 @@
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "./ProductListPage";
 import { CartContext } from "../context/cart.context";
 import { calculateSubtotal } from "../utils/calculateSubtotal";
 import { MobileCart } from "../components/MobileCart";
 
 export const ShoppingCartPage = () => {
   const { cartItems, setCartItems } = useContext(CartContext);
-  console.log(cartItems);
+
   const token = localStorage.getItem("authToken");
 
   const shipping = 20;
@@ -17,7 +16,7 @@ export const ShoppingCartPage = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/cart`, {
+      .get(`${import.meta.env.VITE_API_URL}/api/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -36,36 +35,49 @@ export const ShoppingCartPage = () => {
     });
   };
 
-  const handleIncrementClick = (index) => {
-    setCartItems((prevCartItems) => {
-      const updatedCartItems = [...prevCartItems];
-      updatedCartItems[index].quantity += 1;
-      return updatedCartItems;
-    });
-  };
-
-  // const calculateSubtotal = () => {
-  //   if (!cartItems) return 0;
-  //   return cartItems.reduce((total, item) => {
-  //     return total + item.product?.price * item.quantity;
-  //   }, 0);
+  // const handleIncrementClick = (itemId) => {
+  //   setCartItems((prevCartItems) => {
+  //     // const updatedCartItems = [...prevCartItems];
+  //     // updatedCartItems[index].quantity += 1;
+  //     // return updatedCartItems;
+  //     return prevCartItems.map((cartItem) => {
+  //       if (cartItem.id === itemId) {
+  //         return { ...cartItem, quantity: cartItem.quantity + 1 };
+  //       } else {
+  //         return cartItem;
+  //       }
+  //     });
+  //   });
   // };
+  // function handleQuantityChange(event) {
 
+  //  const value = event.target.value;
+  //   setCartItems((items) => {
+  //     return items.map((cartItem) => {
+  //       if (cartItem.id === id) {
+  //         return { ...cartItem, quantity: parseInt(value) };
+  //       } else {
+  //         return cartItem;
+  //       }
+  //     });
+  //   });
+  // }
   const calculateTotal = () => {
     if (!cartItems) return 0;
     const subtotal = calculateSubtotal(cartItems);
 
-    return subtotal > 0 ? subtotal + shipping : subtotal;
+    const total = subtotal > 0 ? subtotal + shipping : subtotal;
+    return total * 100;
   };
 
   const handleDeleteClick = (item) => {
     axios
-      .delete(`${API_URL}/api/cart/${item._id}`, {
+      .delete(`${import.meta.env.VITE_API_URL}/api/cart/${item._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {
         axios
-          .get(`${API_URL}/api/cart`, {
+          .get(`${import.meta.env.VITE_API_URL}/api/cart`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((response) => {
@@ -80,12 +92,16 @@ export const ShoppingCartPage = () => {
 
   const handleCheckoutClick = () => {
     axios
-      .post(`${API_URL}/api/create-checkout-session`, cartItems, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .post(
+        `${import.meta.env.VITE_API_URL}/api/create-checkout-session`,
+        cartItems,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         window.location = response.data.url;
-        return axios.delete(`${API_URL}/api/cart`, {
+        return axios.delete(`${import.meta.env.VITE_API_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
       })
@@ -93,9 +109,13 @@ export const ShoppingCartPage = () => {
       .catch((error) => console.error(error));
   };
 
+  console.log(cartItems);
+
   if (cartItems === null) {
     return <div>Loading...</div>;
   }
+
+  console.log(calculateTotal);
 
   return (
     <div className="bg-gray-100 py-4">
@@ -162,7 +182,7 @@ export const ShoppingCartPage = () => {
                              w-max mx-auto"
                             >
                               <button
-                                onClick={() => handleDecrementClick(index)}
+                                onClick={() => handleDecrementClick(item._id)}
                                 className="border rounded-md py-2 px-4"
                               >
                                 -
@@ -199,7 +219,7 @@ export const ShoppingCartPage = () => {
               <h2 className="text-lg font-semibold mb-4">Summary</h2>
               <div className="flex justify-between mb-2">
                 <span>Subtotal</span>
-                <span>${calculateSubtotal(cartItems).toFixed(2)}</span>
+                <span>${calculateSubtotal(cartItems)}</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span>Shipping</span>
@@ -208,9 +228,7 @@ export const ShoppingCartPage = () => {
               <hr className="my-2" />
               <div className="flex justify-between mb-2">
                 <span className="font-semibold">Total</span>
-                <span className="font-semibold">
-                  ${calculateTotal().toFixed(2)}
-                </span>
+                <span className="font-semibold">${calculateTotal()}</span>
               </div>
 
               {cartItems && cartItems.length > 0 && (

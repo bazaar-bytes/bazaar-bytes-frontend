@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { DeleteModal } from "../components/DeleteModal";
 import { WarningAlert } from "../components/WarningAlert";
-import { API_URL } from "./ProductListPage";
 
 export const EditProductPage = () => {
   const { productId } = useParams();
@@ -26,13 +25,16 @@ export const EditProductPage = () => {
   ];
 
   useEffect(() => {
-    axios.get(`${API_URL}/products/${productId}`).then((response) => {
-      setName(response.data.name);
-      setDescription(response.data.description);
-      setPrice(response.data.price);
-      setImage(response.data.image);
-      setCategory(response.data.category);
-    });
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/products/${productId}`)
+      .then((response) => {
+        console.log(response.data);
+        setName(response.data.name);
+        setDescription(response.data.description);
+        setPrice(response.data.price);
+        setImage(response.data.image);
+        setCategory(response.data.category);
+      });
   }, [productId]);
 
   const handleEditSubmit = (e) => {
@@ -41,7 +43,7 @@ export const EditProductPage = () => {
     e.preventDefault();
     axios
       .put(
-        `${API_URL}/products/${productId}`,
+        `${import.meta.env.VITE_API_URL}/api/products/${productId}`,
         {
           name,
           description,
@@ -69,7 +71,7 @@ export const EditProductPage = () => {
   const handleDelete = () => {
     const token = localStorage.getItem("authToken");
     axios
-      .delete(`${API_URL}/products/${productId}`, {
+      .delete(`${import.meta.env.VITE_API_URL}/products/${productId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => navigate(`/`))
@@ -81,8 +83,6 @@ export const EditProductPage = () => {
         }
       });
   };
-
-  console.log(errorMessage);
 
   return (
     <>

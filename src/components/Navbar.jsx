@@ -7,13 +7,8 @@ import { calculateSubtotal } from "../utils/calculateSubtotal";
 
 export const Navbar = () => {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);
+  console.log(isLoggedIn);
   const { cartItems } = useContext(CartContext);
-
-  // const calculateSubtotal = () => {
-  //   return cartItems.reduce((total, item) => {
-  //     return total + item.product?.price * item.quantity;
-  //   }, 0);
-  // };
 
   return (
     <div className=" bg-indigo-600 text-primary-content">
@@ -79,9 +74,9 @@ export const Navbar = () => {
                         Subtotal: €{calculateSubtotal(cartItems).toFixed(2)}
                       </span>
                       <div className="card-actions">
-                        <button className="btn btn-primary btn-block">
+                        <Link to="/cart" className="btn btn-primary btn-block">
                           View cart
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

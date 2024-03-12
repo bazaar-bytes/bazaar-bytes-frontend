@@ -4,7 +4,6 @@ import { ProductCard } from "../components/ProductCard";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 import { ProductsContext } from "../context/products.context";
-import { API_URL } from "./ProductListPage";
 
 export const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -14,7 +13,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/my-products`, {
+      .get(`${import.meta.env.VITE_API_URL}/api/my-products`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },

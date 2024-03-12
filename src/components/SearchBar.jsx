@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { ProductsContext } from "../context/products.context";
-import { API_URL } from "../pages/ProductListPage";
 import { useDebounce } from "use-debounce";
 
 export const SearchBar = () => {
@@ -11,7 +10,11 @@ export const SearchBar = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/products/search?q=${debouncedQuery}`)
+      .get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/products/search?q=${debouncedQuery}`
+      )
       .then((response) => {
         setProducts(response.data);
       })

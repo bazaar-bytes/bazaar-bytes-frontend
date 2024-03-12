@@ -2,7 +2,6 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
-import { API_URL } from "./ProductListPage";
 
 export const ProductDetailsPage = () => {
   const { user } = useContext(AuthContext);
@@ -15,7 +14,7 @@ export const ProductDetailsPage = () => {
     const token = localStorage.getItem("authToken");
     axios
       .post(
-        `${API_URL}/api/cart`,
+        `${import.meta.env.VITE_API_URL}/api/cart`,
         { product: productId, user: user._id },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -30,7 +29,7 @@ export const ProductDetailsPage = () => {
   useEffect(() => {
     if (user) {
       axios
-        .get(`${API_URL}/api/products/${productId}`)
+        .get(`${import.meta.env.VITE_API_URL}/api/products/${productId}`)
         .then((response) => {
           setProduct(response.data);
           setIsOwner(response.data.createdBy === user._id);
