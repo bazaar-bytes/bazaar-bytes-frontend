@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import { CartContext } from "../context/cart.context";
 
 export const ProductDetailsPage = () => {
   const { user } = useContext(AuthContext);
@@ -9,6 +10,8 @@ export const ProductDetailsPage = () => {
   const [isOwner, setIsOwner] = useState(false);
 
   const { productId } = useParams();
+
+  const { fetchCartItems } = useContext(CartContext);
 
   const handleBuyClick = () => {
     const token = localStorage.getItem("authToken");
@@ -20,6 +23,9 @@ export const ProductDetailsPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
+      .then(() => {
+        fetchCartItems();
+      })
       .catch((error) => console.error(error));
   };
 
