@@ -23,14 +23,6 @@ export const ProductListPage = () => {
       });
   }, []);
 
-  const ownedProducts = products?.filter(
-    (product) => product.createdBy?._id === user?._id
-  );
-
-  const allProducts = products?.filter(
-    (product) => product.createdBy?._id !== user?._id
-  );
-
   return (
     <div className="flex flex-col gap-8">
       {user && (
@@ -54,20 +46,15 @@ export const ProductListPage = () => {
             <h1 className="text-left font-bold text-2xl">Explore</h1>
 
             <div className="grid gap-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 2xl:grid-cols-6">
-              {allProducts.map((product) => (
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                  isPublic={pathname === "/"}
-                />
-              ))}
-            </div>
-            <h1 className="text-left font-bold text-2xl">Your products</h1>
-
-            <div className="grid gap-3 gap-y-8 sm:grid-cols-3 lg:grid-cols-4  xl:grid-cols-5 2xl:grid-cols-6">
-              {ownedProducts.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
+              {products
+                .filter((product) => product.createdBy?._id !== user?._id)
+                .map((product) => (
+                  <ProductCard
+                    key={product._id}
+                    product={product}
+                    isPublic={pathname === "/"}
+                  />
+                ))}
             </div>
           </div>
         )}
