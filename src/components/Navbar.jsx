@@ -7,7 +7,6 @@ import { calculateSubtotal } from "../utils/calculateSubtotal";
 
 export const Navbar = () => {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);
-  console.log(isLoggedIn);
   const { cartItems } = useContext(CartContext);
 
   return (
@@ -58,7 +57,6 @@ export const Navbar = () => {
                       {cartItems && (
                         <span className="badge badge-sm indicator-item">
                           {cartItems.reduce((total, current) => {
-                            console.log("currentCartItem", current);
                             return total + current.quantity;
                           }, 0)}
                         </span>
@@ -71,7 +69,11 @@ export const Navbar = () => {
                   >
                     <div className="card-body">
                       <span className="font-bold text-lg">
-                        {cartItems ? cartItems.length : "0"} Items
+                        {cartItems &&
+                          cartItems.reduce((total, current) => {
+                            return total + current.quantity;
+                          }, 0)}{" "}
+                        Items
                       </span>
                       <span className="text-info">
                         Subtotal: €{calculateSubtotal(cartItems).toFixed(2)}

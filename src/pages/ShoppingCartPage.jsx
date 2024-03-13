@@ -5,7 +5,7 @@ import { CartContext } from "../context/cart.context";
 import { MobileCart } from "../components/MobileCart";
 
 export const ShoppingCartPage = () => {
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const { cartItems, setCartItems, fetchCartItems } = useContext(CartContext);
 
   const token = localStorage.getItem("authToken");
 
@@ -13,39 +13,11 @@ export const ShoppingCartPage = () => {
 
   const navigate = useNavigate();
 
-  const fetchCartItems = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/cart`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      // console.log(response.data);
-      const uniqueItems = response.data.reduce((acc, item) => {
-        const existingItem = acc.find(
-          (accItem) => accItem.product._id === item?.product._id
-        );
-        if (existingItem) {
-          existingItem.quantity += 1;
-        } else {
-          acc.push({ ...item, quantity: 1 });
-        }
-        return acc;
-      }, []);
-
-      setCartItems(uniqueItems);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     fetchCartItems();
   }, []);
 
   const handleDecrementClick = (item) => {
-    console.log("item: ", item);
     axios
       .delete(
         `${import.meta.env.VITE_API_URL}/api/cart/reduceQuantity/${item._id}`,
@@ -61,8 +33,6 @@ export const ShoppingCartPage = () => {
   };
 
   const handleIncrementClick = (item) => {
-    console.log(item.product);
-
     axios
       .post(
         `${import.meta.env.VITE_API_URL}/api/cart`,
@@ -92,20 +62,12 @@ export const ShoppingCartPage = () => {
   };
 
   const handleDeleteClick = (item) => {
-    console.log("item to delete; ", item.product);
     axios
       .delete(`${import.meta.env.VITE_API_URL}/api/cart/${item.product._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {
-        axios
-          .get(`${import.meta.env.VITE_API_URL}/api/cart`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then(() => {
-            fetchCartItems();
-          })
-          .catch((error) => console.error(error));
+        fetchCartItems();
       })
 
       .catch((error) => console.error(error));
@@ -129,8 +91,6 @@ export const ShoppingCartPage = () => {
       .catch((error) => console.error(error))
       .catch((error) => console.error(error));
   };
-
-  console.log(cartItems);
 
   if (cartItems === null) {
     return <div>Loading...</div>;

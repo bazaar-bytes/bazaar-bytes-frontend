@@ -11,12 +11,12 @@ const defaultValues = {
 };
 
 const categories = [
-  "tech",
-  "clothes",
-  "furniture",
-  "collectibles",
-  "books",
-  "vehicles",
+  "TECH",
+  "CLOTHES",
+  "FURNITURE",
+  "COLLECTIBLES",
+  "BOOKS",
+  "VEHICLES",
 ];
 
 export const AddProductPage = () => {
