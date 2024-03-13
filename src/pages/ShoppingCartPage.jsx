@@ -14,65 +14,88 @@ export const ShoppingCartPage = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/cart`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setCartItems(response.data.map((item) => ({ ...item, quantity: 1 })));
-      })
-      .catch((error) => console.error(error));
-  }, []);
+  const fetchCartItems = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/cart`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      // console.log(response.data);
+      const uniqueItems = response.data.reduce((acc, item) => {
+        const existingItem = acc.find(
+          (accItem) => accItem.product._id === item?.product._id
+        );
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          acc.push({ ...item, quantity: 1 });
+        }
+        return acc;
+      }, []);
 
-  const handleDecrementClick = (index) => {
-    setCartItems((prevCartItems) => {
-      const updatedCartItems = [...prevCartItems];
-      if (updatedCartItems[index].quantity >= 1) {
-        updatedCartItems[index].quantity -= 1;
-      }
-      return updatedCartItems;
-    });
+      setCartItems(uniqueItems);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // const handleIncrementClick = (itemId) => {
-  //   setCartItems((prevCartItems) => {
-  //     // const updatedCartItems = [...prevCartItems];
-  //     // updatedCartItems[index].quantity += 1;
-  //     // return updatedCartItems;
-  //     return prevCartItems.map((cartItem) => {
-  //       if (cartItem.id === itemId) {
-  //         return { ...cartItem, quantity: cartItem.quantity + 1 };
-  //       } else {
-  //         return cartItem;
-  //       }
-  //     });
-  //   });
-  // };
-  // function handleQuantityChange(event) {
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
 
-  //  const value = event.target.value;
-  //   setCartItems((items) => {
-  //     return items.map((cartItem) => {
-  //       if (cartItem.id === id) {
-  //         return { ...cartItem, quantity: parseInt(value) };
-  //       } else {
-  //         return cartItem;
-  //       }
-  //     });
-  //   });
-  // }
+  const handleDecrementClick = (item) => {
+    console.log("item: ", item);
+    axios
+      .delete(
+        `${import.meta.env.VITE_API_URL}/api/cart/reduceQuantity/${item._id}`,
+
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => {
+        fetchCartItems();
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const handleIncrementClick = (item) => {
+    console.log(item.product);
+
+    axios
+      .post(
+        `${import.meta.env.VITE_API_URL}/api/cart`,
+        { product: item.product },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => {
+        fetchCartItems();
+      });
+  };
+
+  const calculateSubtotal = () => {
+    if (!cartItems) return 0;
+    return cartItems.reduce((total, item) => {
+      return total + item.product.price * item.quantity;
+    }, 0);
+  };
+
   const calculateTotal = () => {
     if (!cartItems) return 0;
     const subtotal = calculateSubtotal(cartItems);
 
     const total = subtotal > 0 ? subtotal + shipping : subtotal;
-    return total * 100;
+    return total;
   };
 
   const handleDeleteClick = (item) => {
+    console.log("item to delete; ", item.product);
     axios
-      .delete(`${import.meta.env.VITE_API_URL}/api/cart/${item._id}`, {
+      .delete(`${import.meta.env.VITE_API_URL}/api/cart/${item.product._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {
@@ -81,12 +104,14 @@ export const ShoppingCartPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((response) => {
+            console.log(response.data);
             setCartItems(
               response.data.map((item) => ({ ...item, quantity: 1 }))
             );
           })
           .catch((error) => console.error(error));
       })
+
       .catch((error) => console.error(error));
   };
 
@@ -115,16 +140,11 @@ export const ShoppingCartPage = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(calculateTotal);
-
   return (
     <div className="bg-gray-100 py-4">
       <div className="container mx-auto px-4">
         <div className="flex justify-between border-b pb-4">
           <h1 className="font-semibold text-2xl text-center">Shopping Cart</h1>
-          <h2 className="font-semibold text-2xl">
-            {cartItems && cartItems.length} Items
-          </h2>
         </div>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="md:w-3/4">
@@ -140,14 +160,14 @@ export const ShoppingCartPage = () => {
                 </thead>
                 <tbody>
                   {cartItems &&
-                    cartItems.map((item, index) => {
+                    cartItems.map((item) => {
                       return (
                         <tr key={item?._id}>
                           <td className="py-4 border-t-4 ">
                             <div className="flex justify-between items-center">
                               <img
-                                className="h-16 w-16"
-                                src={item.product?.image}
+                                className="h-16 w-16 mr-4"
+                                src={item?.product?.image}
                                 alt="Product image"
                               />
                               <span className="font-semibold">
@@ -182,8 +202,8 @@ export const ShoppingCartPage = () => {
                              w-max mx-auto"
                             >
                               <button
-                                onClick={() => handleDecrementClick(item._id)}
-                                className="border rounded-md py-2 px-4"
+                                onClick={() => handleDecrementClick(item)}
+                                className="border rounded-md py-2 px-4 mr-2"
                               >
                                 -
                               </button>
@@ -191,8 +211,8 @@ export const ShoppingCartPage = () => {
                                 {item.quantity}
                               </span>
                               <button
-                                onClick={() => handleIncrementClick(index)}
-                                className="border rounded-md py-2 px-4"
+                                onClick={() => handleIncrementClick(item)}
+                                className="border rounded-md py-2 px-4 ml-2"
                               >
                                 +
                               </button>

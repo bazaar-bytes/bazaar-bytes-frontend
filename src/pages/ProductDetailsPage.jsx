@@ -20,9 +20,6 @@ export const ProductDetailsPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) => {
-        console.log(response);
-      })
       .catch((error) => console.error(error));
   };
 
