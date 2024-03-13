@@ -11,20 +11,64 @@ export const ProductDetailsPage = () => {
 
   const { productId } = useParams();
 
-  const handleBuyClick = () => {
+  // const handleBuyClick = () => {
+  //   const token = localStorage.getItem("authToken");
+  //   const existingCartArray = localStorage.getItem("cartItems");
+  //   let existingArray = [];
+
+  //   if (existingCartArray) {
+  //     existingArray = JSON.parse(existingCartArray);
+  //   }
+
+  //   existingArray.push({ product: productId, user: user._id });
+
+  //   const updatedArrayString = JSON.stringify(existingArray);
+
+  //   localStorage.setItem("cartItems", updatedArrayString);
+
+  //   axios
+  //     .post(
+  //       `${API_URL}/api/cart`,
+  //       { product: productId, user: user._id },
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => console.error(error));
+  // };
+  const handleBuyClick = async () => {
     const token = localStorage.getItem("authToken");
-    axios
-      .post(
+
+    try {
+      let existingArray = [];
+
+      const existingCartArray = localStorage.getItem("cartItems");
+
+      if (existingCartArray) {
+        existingArray = JSON.parse(existingCartArray);
+      }
+
+      existingArray.push({ product: productId, user: user._id });
+
+      const updatedArrayString = JSON.stringify(existingArray);
+
+      localStorage.setItem("cartItems", updatedArrayString);
+
+      const response = await axios.post(
         `${API_URL}/api/cart`,
         { product: productId, user: user._id },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-      )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => console.error(error));
+      );
+
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error handling buy click:", error);
+    }
   };
 
   useEffect(() => {

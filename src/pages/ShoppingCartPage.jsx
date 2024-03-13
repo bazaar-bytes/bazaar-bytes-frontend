@@ -11,33 +11,64 @@ export const ShoppingCartPage = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/api/cart`, {
+  const fetchCartItems = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/api/cart`, {
         headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setCartItems(response.data.map((item) => ({ ...item, quantity: 1 })));
-      })
-      .catch((error) => console.error(error));
-  }, []);
+      });
+      console.log(response.data);
+      const uniqueItems = response.data.reduce((acc, item) => {
+        const existingItem = acc.find(
+          (accItem) => accItem.product._id === item?.product._id
+        );
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          acc.push({ ...item, quantity: 1 });
+        }
+        return acc;
+      }, []);
 
-  const handleDecrementClick = (index) => {
-    setCartItems((prevCartItems) => {
-      const updatedCartItems = [...prevCartItems];
-      if (updatedCartItems[index].quantity >= 1) {
-        updatedCartItems[index].quantity -= 1;
-      }
-      return updatedCartItems;
-    });
+      setCartItems(uniqueItems);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleIncrementClick = (index) => {
-    setCartItems((prevCartItems) => {
-      const updatedCartItems = [...prevCartItems];
-      updatedCartItems[index].quantity += 1;
-      return updatedCartItems;
-    });
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  const handleDecrementClick = (item) => {
+    console.log("item: ", item);
+    axios
+      .delete(
+        `${API_URL}/api/cart/reduceQuantity/${item._id}`,
+
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => {
+        fetchCartItems();
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const handleIncrementClick = (item) => {
+    console.log(item.product);
+
+    axios
+      .post(
+        `${API_URL}/api/cart`,
+        { product: item.product },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then(() => {
+        fetchCartItems();
+      });
   };
 
   const calculateSubtotal = () => {
@@ -55,8 +86,9 @@ export const ShoppingCartPage = () => {
   };
 
   const handleDeleteClick = (item) => {
+    console.log("item", item.product);
     axios
-      .delete(`${API_URL}/api/cart/${item._id}`, {
+      .delete(`${API_URL}/api/cart/${item.product._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => {
@@ -65,12 +97,14 @@ export const ShoppingCartPage = () => {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((response) => {
+            console.log(response.data);
             setCartItems(
               response.data.map((item) => ({ ...item, quantity: 1 }))
             );
           })
           .catch((error) => console.error(error));
       })
+
       .catch((error) => console.error(error));
   };
 
@@ -81,6 +115,7 @@ export const ShoppingCartPage = () => {
       })
       .then((response) => {
         window.location = response.data.url;
+        localStorage.removeItem("cartItems");
         return axios.delete(`${API_URL}/api/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -98,9 +133,6 @@ export const ShoppingCartPage = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between border-b pb-8">
           <h1 className="font-semibold text-2xl text-center">Shopping Cart</h1>
-          <h2 className="font-semibold text-2xl">
-            {cartItems && cartItems.length} Items
-          </h2>
         </div>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="md:w-3/4">
@@ -116,14 +148,14 @@ export const ShoppingCartPage = () => {
                 </thead>
                 <tbody>
                   {cartItems &&
-                    cartItems.map((item, index) => {
+                    cartItems.map((item) => {
                       return (
                         <tr key={item._id}>
                           <td className="py-4 border-t-4 ">
                             <div className="flex justify-between items-center">
                               <img
                                 className="h-16 w-16 mr-4"
-                                src={item.product.image}
+                                src={item?.product?.image}
                                 alt="Product image"
                               />
                               <span className="font-semibold">
@@ -159,7 +191,7 @@ export const ShoppingCartPage = () => {
                           <td className="py-4">
                             <div className="flex items-center">
                               <button
-                                onClick={() => handleDecrementClick(index)}
+                                onClick={() => handleDecrementClick(item)}
                                 className="border rounded-md py-2 px-4 mr-2"
                               >
                                 -
@@ -168,7 +200,7 @@ export const ShoppingCartPage = () => {
                                 {item.quantity}
                               </span>
                               <button
-                                onClick={() => handleIncrementClick(index)}
+                                onClick={() => handleIncrementClick(item)}
                                 className="border rounded-md py-2 px-4 ml-2"
                               >
                                 +
