@@ -21,6 +21,8 @@ const categories = [
 
 export const AddProductPage = () => {
   const [product, setProduct] = useState(defaultValues);
+  const [waitingForImage, setWaitingForImage] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
   const { user } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -38,6 +40,7 @@ export const AddProductPage = () => {
     const requestBody = {
       ...product,
       createdBy: user._id,
+      image: imageUrl || product.image,
     };
 
     axios
@@ -52,6 +55,31 @@ export const AddProductPage = () => {
       })
       .catch((error) => console.log(error));
   };
+
+  function handleFileUpload(e) {
+    setWaitingForImage(true);
+
+    const url = `https://api.cloudinary.com/v1_1/${
+      import.meta.env.VITE_CLOUDINARY_NAME
+    }/upload`;
+
+    const dataToUpload = new FormData();
+    dataToUpload.append("file", e.target.files[0]);
+    dataToUpload.append(
+      "upload_preset",
+      import.meta.env.VITE_UNSIGNED_UPLOAD_PRESET
+    );
+
+    axios
+      .post(url, dataToUpload)
+      .then((response) => {
+        setImageUrl(response.data.secure_url);
+        setWaitingForImage(false);
+      })
+      .catch((error) => {
+        console.error("Error uploading the file:", error);
+      });
+  }
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -103,6 +131,14 @@ export const AddProductPage = () => {
               name="image"
             />
           </label>
+          <div className="flex items-center">
+            <input type="file" onChange={(e) => handleFileUpload(e)} />
+
+            {imageUrl && (
+              <img className="w-10" src={imageUrl} alt="my cloudinary image" />
+            )}
+          </div>
+
           <select className="select select-primary w-full max-w-xs">
             <option disabled selected>
               Category
@@ -116,7 +152,9 @@ export const AddProductPage = () => {
             })}
           </select>
 
-          <button className="btn btn-active mx-auto">Add Product</button>
+          <button className="btn btn-active mx-auto" disabled={waitingForImage}>
+            Add Product
+          </button>
         </div>
       </form>
     </div>

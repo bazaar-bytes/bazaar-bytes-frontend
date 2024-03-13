@@ -14,6 +14,8 @@ export const EditProductPage = () => {
   const [category, setCategory] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [warningShown, setWarningShown] = useState(false);
+  const [waitingForImage, setWaitingForImage] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const categories = [
     "tech",
@@ -48,7 +50,7 @@ export const EditProductPage = () => {
           name,
           description,
           price,
-          image,
+          image: imageUrl || image,
           category,
         },
         {
@@ -57,7 +59,7 @@ export const EditProductPage = () => {
       )
       .then((response) => {
         console.log(response.data);
-        navigate("/");
+        navigate("/my-dashboard");
       })
       .catch((error) => {
         console.error(error);
@@ -71,7 +73,7 @@ export const EditProductPage = () => {
   const handleDelete = () => {
     const token = localStorage.getItem("authToken");
     axios
-      .delete(`${import.meta.env.VITE_API_URL}/products/${productId}`, {
+      .delete(`${import.meta.env.VITE_API_URL}/api/products/${productId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then(() => navigate(`/`))
@@ -84,9 +86,41 @@ export const EditProductPage = () => {
       });
   };
 
+  function handleFileUpload(e) {
+    setWaitingForImage(true);
+
+    const url = `https://api.cloudinary.com/v1_1/${
+      import.meta.env.VITE_CLOUDINARY_NAME
+    }/upload`;
+
+    const dataToUpload = new FormData();
+    dataToUpload.append("file", e.target.files[0]);
+    dataToUpload.append(
+      "upload_preset",
+      import.meta.env.VITE_UNSIGNED_UPLOAD_PRESET
+    );
+
+    axios
+      .post(url, dataToUpload)
+      .then((response) => {
+        setImageUrl(response.data.secure_url);
+        setWaitingForImage(false);
+      })
+      .catch((error) => {
+        console.error("Error uploading the file:", error);
+      });
+  }
+
   return (
-    <>
-      <form action="" onSubmit={handleEditSubmit}>
+    <div className="flex flex-col gap-6">
+      <h1 className="font-bold">
+        Here you can edit details about your product
+      </h1>
+      <form
+        action=""
+        onSubmit={handleEditSubmit}
+        className="flex flex-col gap-4 "
+      >
         <label className="input input-bordered flex items-center gap-2">
           Name:
           <input
@@ -127,6 +161,13 @@ export const EditProductPage = () => {
             onChange={(e) => setImage(e.target.value)}
           />
         </label>
+        <div className="flex items-center">
+          <input type="file" onChange={(e) => handleFileUpload(e)} />
+
+          {imageUrl && (
+            <img className="w-10" src={imageUrl} alt="my cloudinary image" />
+          )}
+        </div>
         <select className="select select-primary w-full max-w-xs">
           <option disabled selected>
             Category
@@ -139,9 +180,16 @@ export const EditProductPage = () => {
             );
           })}
         </select>
+        <div className="flex gap-9 mx-auto">
+          <button
+            className="bg-indigo-600 rounded-[4px] text-white px-[15px]"
+            disabled={waitingForImage}
+          >
+            Edit
+          </button>
+          <DeleteModal deleteProduct={handleDelete} />
+        </div>
 
-        <button>Edit</button>
-        <DeleteModal deleteProduct={handleDelete} />
         {warningShown && (
           <WarningAlert
             errorMessage={errorMessage}
@@ -149,6 +197,6 @@ export const EditProductPage = () => {
           />
         )}
       </form>
-    </>
+    </div>
   );
 };
