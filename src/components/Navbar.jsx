@@ -57,7 +57,10 @@ export const Navbar = () => {
                       </svg>
                       {cartItems && (
                         <span className="badge badge-sm indicator-item">
-                          {cartItems.length}
+                          {cartItems.reduce((total, current) => {
+                            console.log("currentCartItem", current);
+                            return total + current.quantity;
+                          }, 0)}
                         </span>
                       )}
                     </div>
