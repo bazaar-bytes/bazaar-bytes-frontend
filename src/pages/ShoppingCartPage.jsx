@@ -6,6 +6,7 @@ import { MobileCart } from "../components/MobileCart";
 
 export const ShoppingCartPage = () => {
   const { cartItems, setCartItems } = useContext(CartContext);
+  console.log(cartItems);
 
   const token = localStorage.getItem("authToken");
 
@@ -94,6 +95,7 @@ export const ShoppingCartPage = () => {
   const handleDeleteClick = (item) => {
     console.log("item to delete; ", item.product);
     axios
+
       .delete(`${import.meta.env.VITE_API_URL}/api/cart/${item.product._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -235,7 +237,7 @@ export const ShoppingCartPage = () => {
               <h2 className="text-lg font-semibold mb-4">Summary</h2>
               <div className="flex justify-between mb-2">
                 <span>Subtotal</span>
-                <span>${calculateSubtotal(cartItems)}</span>
+                <span>${Math.round(calculateSubtotal(cartItems))}</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span>Shipping</span>
@@ -244,7 +246,9 @@ export const ShoppingCartPage = () => {
               <hr className="my-2" />
               <div className="flex justify-between mb-2">
                 <span className="font-semibold">Total</span>
-                <span className="font-semibold">${calculateTotal()}</span>
+                <span className="font-semibold">
+                  ${Math.round(calculateTotal())}
+                </span>
               </div>
 
               {cartItems && cartItems.length > 0 && (
