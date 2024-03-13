@@ -24,10 +24,14 @@ export const Dashboard = () => {
   }, []);
 
   return (
-    <div>
-      <Link to="/products/add">
-        <button className="btn btn-primary">Add New Product</button>
-      </Link>
+    <div className="flex flex-col gap-8">
+      <div className="flex justify-between items-center">
+        <h1 className="text-left font-bold text-2xl">Your products</h1>
+        <Link to="/products/add">
+          <button className="btn btn-primary">Add New Product</button>
+        </Link>
+      </div>
+
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products === null ? (
           <h1>Loading...</h1>

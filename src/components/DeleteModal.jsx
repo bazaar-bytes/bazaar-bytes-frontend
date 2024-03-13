@@ -3,8 +3,8 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 export const DeleteModal = ({ deleteProduct }) => (
   <AlertDialog.Root>
     <AlertDialog.Trigger asChild>
-      <button className="inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] outline-none focus:shadow-[0_0_0_2px] focus:shadow-black">
-        Delete account
+      <button className="inline-flex h-[35px] items-center justify-center rounded-[4px] bg-red-500 px-[15px] font-medium leading-none shadow-lg outline-none hover:opacity-80 text-white">
+        Delete product
       </button>
     </AlertDialog.Trigger>
     <AlertDialog.Portal>
