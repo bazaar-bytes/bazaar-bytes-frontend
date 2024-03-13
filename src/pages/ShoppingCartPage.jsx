@@ -2,7 +2,6 @@ import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartContext } from "../context/cart.context";
-import { calculateSubtotal } from "../utils/calculateSubtotal";
 import { MobileCart } from "../components/MobileCart";
 
 export const ShoppingCartPage = () => {
@@ -103,11 +102,8 @@ export const ShoppingCartPage = () => {
           .get(`${import.meta.env.VITE_API_URL}/api/cart`, {
             headers: { Authorization: `Bearer ${token}` },
           })
-          .then((response) => {
-            console.log(response.data);
-            setCartItems(
-              response.data.map((item) => ({ ...item, quantity: 1 }))
-            );
+          .then(() => {
+            fetchCartItems();
           })
           .catch((error) => console.error(error));
       })
