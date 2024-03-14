@@ -11,15 +11,14 @@ import { IsPrivate } from "./components/IsPrivate";
 import { ShoppingCartPage } from "./pages/ShoppingCartPage";
 import { Dashboard } from "./pages/Dashboard";
 import { PaymentSuccess } from "./pages/PaymentSuccess";
+import { Footer } from "./components/Footer";
+import { About } from "./pages/About";
 
 function App() {
-  // const { pathname } = useLocation();
-  // console.log(pathname);
-
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-screen overflow-hidden">
       <Navbar />
-      <div className="p-10">
+      <div className="flex-1 overflow-y-auto">
         <Routes>
           <Route path="/" element={<ProductListPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -77,8 +76,11 @@ function App() {
               </IsPrivate>
             }
           />
+          <Route path="/about" element={<About />} />
         </Routes>
       </div>
+
+      <Footer />
     </div>
   );
 }
