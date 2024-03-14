@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/auth.context";
+import { WarningAlert } from "../components/WarningAlert";
 
 export const SignupPage = () => {
   const [name, setName] = useState("");
@@ -11,6 +12,8 @@ export const SignupPage = () => {
   const navigate = useNavigate();
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
+
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
@@ -31,6 +34,7 @@ export const SignupPage = () => {
         console.error(error);
         const errorDescription = error.response.data.message;
         setErrorMessage(errorDescription);
+        setIsVisible(true);
       });
   };
 
@@ -122,7 +126,13 @@ export const SignupPage = () => {
               </button>
             </div>
           </form>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          {isVisible && (
+            <WarningAlert
+              className="my-3"
+              errorMessage={errorMessage}
+              closeAlert={() => setIsVisible(false)}
+            />
+          )}
         </div>
       </div>
     </>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import { Link, useNavigate } from "react-router-dom";
+import { WarningAlert } from "../components/WarningAlert";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,8 @@ export const LoginPage = () => {
   const navigate = useNavigate();
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
+
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -26,6 +29,7 @@ export const LoginPage = () => {
       .catch((error) => {
         const errorDescription = error.response.data.message;
         setErrorMessage(errorDescription);
+        setIsVisible(true);
       });
   };
   return (
@@ -96,7 +100,14 @@ export const LoginPage = () => {
               </button>
             </div>
           </form>
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+          {isVisible && (
+            <WarningAlert
+              className="my-3"
+              errorMessage={errorMessage}
+              closeAlert={() => setIsVisible(false)}
+            />
+          )}
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Don't have an account yet?
