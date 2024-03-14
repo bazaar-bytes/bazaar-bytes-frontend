@@ -18,7 +18,7 @@ function App() {
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <Navbar />
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto scroll-my-0 p-12 h-full">
         <Routes>
           <Route path="/" element={<ProductListPage />} />
           <Route path="/signup" element={<SignupPage />} />
