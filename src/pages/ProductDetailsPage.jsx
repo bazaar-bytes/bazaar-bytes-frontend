@@ -30,15 +30,15 @@ export const ProductDetailsPage = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      axios
-        .get(`${import.meta.env.VITE_API_URL}/api/products/${productId}`)
-        .then((response) => {
-          setProduct(response.data);
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/products/${productId}`)
+      .then((response) => {
+        if (user) {
           setIsOwner(response.data.createdBy === user._id);
-        })
-        .catch((error) => console.log(error));
-    }
+        }
+        setProduct(response.data);
+      })
+      .catch((error) => console.log(error));
   }, [user, productId]);
 
   return (
