@@ -5,7 +5,7 @@ import { CartContext } from "../context/cart.context";
 import { MobileCart } from "../components/MobileCart";
 
 export const ShoppingCartPage = () => {
-  const { cartItems, setCartItems, fetchCartItems } = useContext(CartContext);
+  const { cartItems, fetchCartItems } = useContext(CartContext);
 
   const token = localStorage.getItem("authToken");
 

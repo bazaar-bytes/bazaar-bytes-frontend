@@ -7,6 +7,7 @@ export const SignupPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(undefined);
   const navigate = useNavigate();
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
@@ -26,7 +27,11 @@ export const SignupPage = () => {
         authenticateUser();
         navigate("/");
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        const errorDescription = error.response.data.message;
+        setErrorMessage(errorDescription);
+      });
   };
 
   return (
@@ -117,7 +122,7 @@ export const SignupPage = () => {
               </button>
             </div>
           </form>
-          {/* {errorMessage && <p className="error-message">{errorMessage}</p>} */}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
       </div>
     </>
