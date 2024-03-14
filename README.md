@@ -1,5 +1,5 @@
 # BazaarBytes
-### Frontend
+ Frontend
 
 ## Description
  Welcome to BazaarBytes, <br />
@@ -20,5 +20,7 @@
 
 Find our app here:[BazaarBytes](https://bazaar-bytes.netlify.app)
 
+### Link to the backend part
+[BazaarBytes_Backend](https://github.com/bazaar-bytes/bazaar-bytes-backend)
 
 
