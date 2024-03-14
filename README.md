@@ -1,8 +1,23 @@
-# React + Vite
+# BazaarBytes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
+ Welcome to BazaarBytes, <br />
+        your go-to marketplace for buying and selling a wide variety of
+        products! At BazaarBytes, we're passionate about connecting buyers and
+        sellers in a seamless and efficient manner, creating a vibrant community
+        where individuals can discover unique items and turn their passions into
+        profits.
 
-Currently, two official plugins are available:
+## Instructions
+- git clone
+- install dependencies (npm install)
+- npm run dev 
+-sign up on stripe to get the env variable for the payment checkout
+-sign up on cloudinary to upload your pictures
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Demo
+
+Find our app here:[BazaarBytes](https://bazaar-bytes.netlify.app)
+
+
+
