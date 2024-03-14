@@ -30,7 +30,6 @@ export const EditProductPage = () => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/api/products/${productId}`)
       .then((response) => {
-        console.log(response.data);
         setName(response.data.name);
         setDescription(response.data.description);
         setPrice(response.data.price);
@@ -57,8 +56,7 @@ export const EditProductPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
-      .then((response) => {
-        console.log(response.data);
+      .then(() => {
         navigate("/my-dashboard");
       })
       .catch((error) => {
@@ -76,7 +74,7 @@ export const EditProductPage = () => {
       .delete(`${import.meta.env.VITE_API_URL}/api/products/${productId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then(() => navigate(`/`))
+      .then(() => navigate(`/my-dashboard`))
       .catch((error) => {
         console.log(error);
         setErrorMessage(error.response.data.message);
@@ -122,11 +120,11 @@ export const EditProductPage = () => {
         className="flex flex-col gap-4 "
       >
         <label className="input input-bordered flex items-center gap-2">
-          Name:
+          Name
           <input
             type="text"
-            className="grow"
-            placeholder=""
+            className="grow "
+            placeholder={name}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
