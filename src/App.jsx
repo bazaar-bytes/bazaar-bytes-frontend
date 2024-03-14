@@ -1,7 +1,7 @@
 import "./App.css";
 import { AddProductPage } from "./pages/AddProductPage";
 import { ProductListPage } from "./pages/ProductListPage";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { SignupPage } from "./pages/SignupPage";
 import { LoginPage } from "./pages/LoginPage";
 import { ProductDetailsPage } from "./pages/ProductDetailsPage";

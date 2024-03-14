@@ -24,6 +24,7 @@ export const EditProductPage = () => {
     "collectibles",
     "books",
     "vehicles",
+    "other",
   ];
 
   useEffect(() => {

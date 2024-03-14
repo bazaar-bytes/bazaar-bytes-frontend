@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import { WarningAlert } from "../components/WarningAlert";
 
 const defaultValues = {
   name: "",
@@ -23,10 +24,13 @@ export const AddProductPage = () => {
   const [product, setProduct] = useState(defaultValues);
   const [waitingForImage, setWaitingForImage] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [warningShown, setWarningShown] = useState(false);
   const { user } = useContext(AuthContext);
+  const defaultImage =
+    "https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png";
 
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setProduct({
       ...product,
@@ -40,7 +44,7 @@ export const AddProductPage = () => {
     const requestBody = {
       ...product,
       createdBy: user._id,
-      image: imageUrl || product.image,
+      image: imageUrl || product.image || defaultImage,
     };
 
     axios
@@ -53,7 +57,13 @@ export const AddProductPage = () => {
 
         navigate(`/products/details/${newProduct._id}`);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.error(error);
+        setErrorMessage(error.response.data.message);
+        if (errorMessage && errorMessage.length > 1) {
+          setWarningShown(true);
+        }
+      });
   };
 
   function handleFileUpload(e) {
@@ -155,6 +165,12 @@ export const AddProductPage = () => {
           <button className="btn btn-active mx-auto" disabled={waitingForImage}>
             Add Product
           </button>
+          {warningShown && (
+            <WarningAlert
+              errorMessage={errorMessage}
+              closeAlert={() => setWarningShown(false)}
+            />
+          )}
         </div>
       </form>
     </div>
