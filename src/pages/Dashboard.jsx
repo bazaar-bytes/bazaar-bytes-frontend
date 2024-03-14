@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 export const Dashboard = () => {
   const [myProducts, setMyProducts] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -15,6 +16,7 @@ export const Dashboard = () => {
       })
       .then((response) => {
         setMyProducts(response.data);
+        setIsLoading(false);
       });
   }, []);
 
@@ -28,7 +30,7 @@ export const Dashboard = () => {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {myProducts === null ? (
+        {isLoading ? (
           <span className="loading loading-spinner loading-lg"></span>
         ) : (
           myProducts.map((product) => (
