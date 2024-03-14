@@ -11,9 +11,9 @@
 ## Instructions
 - git clone
 - install dependencies (npm install)
-- npm run dev 
--sign up on stripe to get the env variable for the payment checkout
--sign up on cloudinary to upload your pictures
+- npm run dev
+- sign up on stripe to get the env variable for the payment checkout
+- sign up on cloudinary to upload your pictures
 
 ## Demo
 
