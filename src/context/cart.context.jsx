@@ -8,7 +8,6 @@ const CartProviderWrapper = ({ children }) => {
 
   const fetchCartItems = async () => {
     const token = localStorage.getItem("authToken");
-
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/cart`,
