@@ -2,12 +2,13 @@ import { createContext, useState } from "react";
 import axios from "axios";
 
 const CartContext = createContext();
-const token = localStorage.getItem("authToken");
 
 const CartProviderWrapper = ({ children }) => {
   const [cartItems, setCartItems] = useState(null);
 
   const fetchCartItems = async () => {
+    const token = localStorage.getItem("authToken");
+
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/cart`,
