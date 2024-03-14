@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import { SearchBar } from "./SearchBar";
@@ -8,6 +8,9 @@ import { calculateSubtotal } from "../utils/calculateSubtotal";
 export const Navbar = () => {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);
   const { cartItems } = useContext(CartContext);
+  const { pathname } = useLocation();
+
+  const showSearch = pathname === "/" || pathname === "/my-dashboard";
 
   return (
     <div className=" bg-indigo-600 text-primary-content">
@@ -17,7 +20,8 @@ export const Navbar = () => {
         </Link>
 
         <div className="w-1/4 flex justify-end mr-4 gap-6 items-center ">
-          <SearchBar />
+          {showSearch && <SearchBar />}
+
           {!isLoggedIn && (
             <div className="flex gap-6">
               <Link
