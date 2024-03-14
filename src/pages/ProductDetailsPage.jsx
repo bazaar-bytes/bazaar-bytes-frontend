@@ -8,6 +8,7 @@ export const ProductDetailsPage = () => {
   const { user } = useContext(AuthContext);
   const [product, setProduct] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  console.log(product);
 
   const { productId } = useParams();
 

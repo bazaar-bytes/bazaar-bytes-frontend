@@ -27,9 +27,10 @@ export const AddProductPage = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [warningShown, setWarningShown] = useState(false);
   const { user } = useContext(AuthContext);
+  const defaultImage =
+    "https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png";
 
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setProduct({
       ...product,
@@ -43,7 +44,7 @@ export const AddProductPage = () => {
     const requestBody = {
       ...product,
       createdBy: user._id,
-      image: imageUrl || product.image,
+      image: imageUrl || product.image || defaultImage,
     };
 
     axios
