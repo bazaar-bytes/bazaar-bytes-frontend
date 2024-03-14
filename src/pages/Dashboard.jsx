@@ -2,14 +2,10 @@ import axios from "axios";
 import { useContext, useEffect } from "react";
 import { ProductCard } from "../components/ProductCard";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../context/auth.context";
 import { ProductsContext } from "../context/products.context";
 
 export const Dashboard = () => {
-  const { user } = useContext(AuthContext);
-
   const { products, setProducts } = useContext(ProductsContext);
-  console.log(user);
 
   useEffect(() => {
     axios
@@ -34,7 +30,7 @@ export const Dashboard = () => {
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {products === null ? (
-          <h1>Loading...</h1>
+          <span className="loading loading-spinner loading-lg"></span>
         ) : (
           products.map((product) => (
             <ProductCard key={product._id} product={product} />

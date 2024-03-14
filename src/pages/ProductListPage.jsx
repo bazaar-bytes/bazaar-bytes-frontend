@@ -40,7 +40,7 @@ export const ProductListPage = () => {
 
       <div>
         {products === null ? (
-          <h1>Loading...</h1>
+          <span className="loading loading-spinner loading-lg"></span>
         ) : (
           <div className="flex flex-col gap-4">
             <h1 className="text-left font-bold text-2xl">Explore</h1>

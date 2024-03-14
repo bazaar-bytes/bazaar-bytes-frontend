@@ -44,20 +44,20 @@ export const ProductDetailsPage = () => {
   return (
     <div>
       {product === null ? (
-        <h1>Loading...</h1>
+        <span className="loading loading-spinner loading-lg"></span>
       ) : (
-        <div className="card lg:card-side bg-base-100 rounded-none xl:w-2/3 mx-auto ">
-          <figure className="h-80 sm:h-[550px] lg:w-1/2">
+        <div className="card md:flex-row  bg-base-100 rounded-none xl:w-2/3 mx-auto items-center gap-8">
+          <figure className="aspect-square w-[300px] md:w-[700px] lg:w-1/2">
             <img
               src={product.image}
               alt={product.name}
               className="object-cover"
             />
           </figure>
-          <div className="card-body text-left">
+          <div className=" text-left flex flex-col gap-4">
             <h2 className="card-title ">{product.name}</h2>
             <p>{product.description}</p>
-            <p>€{product.price}</p>
+            <p className="font-bold">€{product.price}</p>
             <div className="card-actions ">
               {isOwner ? (
                 <Link to={`/products/edit/${productId}`}>

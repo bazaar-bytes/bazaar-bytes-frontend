@@ -5,7 +5,7 @@ import { CartContext } from "../context/cart.context";
 import { MobileCart } from "../components/MobileCart";
 
 export const ShoppingCartPage = () => {
-  const { cartItems, setCartItems, fetchCartItems } = useContext(CartContext);
+  const { cartItems, fetchCartItems } = useContext(CartContext);
 
   const token = localStorage.getItem("authToken");
 
@@ -98,14 +98,14 @@ export const ShoppingCartPage = () => {
   }
 
   return (
-    <div className="bg-gray-100 py-4">
-      <div className="container mx-auto px-4">
+    <div className="bg-gray-100 py-4 flex flex-col gap-8 px-8">
+      <div className="container max-w-full ">
         <div className="flex justify-between border-b pb-4">
           <h1 className="font-semibold text-2xl text-center">Shopping Cart</h1>
         </div>
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="md:w-3/4">
-            <div className="bg-white rounded-lg shadow-md p-6 mb-4 hidden sm:block">
+        <div className="flex flex-col min-[900px]:flex-row justify-between gap-8">
+          <div className="min-[900px]:w-[70%]">
+            <div className="bg-white rounded-lg shadow-md p-6 mb-4 hidden sm:block w-full">
               <table className="w-full ">
                 <thead className="">
                   <tr>
@@ -176,7 +176,7 @@ export const ShoppingCartPage = () => {
                             </div>
                           </td>
                           <td className="py-4">
-                            ${item.quantity * item.product?.price}
+                            ${item.quantity * Math.round(item.product?.price)}
                           </td>
                         </tr>
                       );
@@ -191,7 +191,7 @@ export const ShoppingCartPage = () => {
               handleIncrementClick={handleIncrementClick}
             />
           </div>
-          <div className="md:w-1/4">
+          <div className="min-[900px]:w-1/4">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-lg font-semibold mb-4">Summary</h2>
               <div className="flex justify-between mb-2">
@@ -213,7 +213,7 @@ export const ShoppingCartPage = () => {
               {cartItems && cartItems.length > 0 && (
                 <button
                   onClick={handleCheckoutClick}
-                  className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full"
+                  className="bg-indigo-600 text-white py-2 px-4 rounded-lg w-max"
                   type="submit"
                 >
                   Checkout
@@ -223,8 +223,13 @@ export const ShoppingCartPage = () => {
           </div>
         </div>
       </div>
-      <div className="text-left mx-12">
-        <button onClick={() => navigate("/")}>Continue shopping</button>
+      <div className="text-left">
+        <button
+          onClick={() => navigate("/")}
+          className="bg-indigo-600 btn btn-primary"
+        >
+          Continue shopping
+        </button>
       </div>
     </div>
   );
