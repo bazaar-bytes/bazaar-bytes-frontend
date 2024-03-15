@@ -16,6 +16,9 @@ const CartProviderWrapper = ({ children }) => {
         }
       );
       console.log("products are fetched :", response.data);
+      console.log("....................");
+      console.log(response.data);
+      console.log("....................");
       const uniqueItems = response.data.reduce((acc, item) => {
         const existingItem = acc.find(
           (accItem) => accItem.product._id === item?.product._id

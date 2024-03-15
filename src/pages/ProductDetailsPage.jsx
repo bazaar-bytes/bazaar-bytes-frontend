@@ -48,7 +48,7 @@ export const ProductDetailsPage = () => {
         <span className="loading loading-spinner loading-lg"></span>
       ) : (
         <div className="card md:flex-row  bg-base-100 rounded-none xl:w-2/3 mx-auto items-center gap-8 md:gap-16 lg:gap-24 xl:gap-32 ">
-          <figure className="aspect-square w-full md:w-1/2 lg:w-1/2 ">
+          <figure className="aspect-square w-full md:w-1/2 lg:w-1/2 rounded-lg ">
             <img
               src={product.image}
               alt={product.name}
@@ -56,9 +56,9 @@ export const ProductDetailsPage = () => {
             />
           </figure>
           <div className="text-left flex flex-col gap-4  w-full md:w-1/2  ">
-            <h2 className="card-title ">{product.name}</h2>
+            <h2 className="card-title">{product.name}</h2>
             <p>{product.description}</p>
-            <p className="font-bold">€{product.price}</p>
+            <p className="font-bold text-xl">€{product.price}</p>
             <div className="card-actions ">
               {isOwner ? (
                 <Link to={`/products/edit/${productId}`}>

@@ -1,8 +1,6 @@
 import { DeveloperCard } from "../components/DeveloperCard";
 import erikImage from "../images/erik.png";
 import mariannaImage from "../images/marianna.jpeg";
-import { FaGithub } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
 
 export const About = () => {
   return (
@@ -22,11 +20,12 @@ export const About = () => {
         server-side functionalities, and MongoDB for scalable and flexible data
         storage.
         <br />
-        Find our codebase on:
+        Find our codebase on
         <a
           href="https://github.com/bazaar-bytes"
-          className="hover:border-b-2 italic"
+          className="hover:border-b-2 italic font-bold"
         >
+          {" "}
           GitHub
         </a>
         .

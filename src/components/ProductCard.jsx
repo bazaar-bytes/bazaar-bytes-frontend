@@ -17,7 +17,7 @@ export const ProductCard = ({ product, isPublic }) => {
           <h3 className="card-title text-sm leading-none text-gray-600">
             {name}
           </h3>
-          <p className="text-sm leading-none">€{price}</p>
+          <p className="text-sm font-bold leading-none">€{price}</p>
           {isPublic && (
             <p className="text-sm leading-none">
               Ad by {product.createdBy?.name}

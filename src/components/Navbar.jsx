@@ -13,17 +13,19 @@ export const Navbar = () => {
   const showSearch = pathname === "/" || pathname === "/my-dashboard";
 
   return (
-    <div className=" bg-indigo-600 text-primary-content">
-      <div className="flex justify-between h-20 items-center px-4">
+    <div className=" bg-indigo-600 text-primary-content ">
+      <div className="flex justify-between h-20 items-center px-4 gap-3">
         <Link to="/">
-          <h1 className="text-2xl">BazaarBytes</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-secondary">
+            BazaarBytes
+          </h1>
         </Link>
 
-        <div className="w-1/4 flex justify-end mr-4 gap-6 items-center ">
+        <div className=" flex justify-end mr-4 gap-5 items-center w-full ">
           {showSearch && <SearchBar />}
 
           {!isLoggedIn && (
-            <div className="flex gap-6">
+            <div className="flex gap-3 ">
               <Link
                 to="/login"
                 className="text-nowrap text-sm font-bold hover:opacity-60"

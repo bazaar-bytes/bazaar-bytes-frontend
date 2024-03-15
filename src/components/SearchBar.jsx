@@ -28,8 +28,8 @@ export const SearchBar = () => {
     <div className="form-control">
       <input
         type="text"
-        placeholder="Search"
-        className="input input-bordered w-24 md:w-auto h-10 rounded-full text-black"
+        placeholder="Search for a product"
+        className="sm:w-full input input-bordered md:w-auto h-10 rounded-full text-black"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
