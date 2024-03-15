@@ -29,7 +29,7 @@ export const SearchBar = () => {
       <input
         type="text"
         placeholder="Search for a product"
-        className="sm:w-full input input-bordered md:w-auto h-10 rounded-full text-black"
+        className="sm:w-full w-24 input input-bordered md:w-auto h-10 rounded-full text-black"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
