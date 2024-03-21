@@ -27,11 +27,11 @@ export const ProductListPage = () => {
     <div className="flex flex-col gap-8">
       {user && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-400">
             Welcome, {user.name}!
           </h2>
           <Link to="/products/add">
-            <button className="btn btn-primary bg-indigo-600">
+            <button className="btn btn-primary bg-indigo-600 dark:border-none">
               Sell a product
             </button>
           </Link>

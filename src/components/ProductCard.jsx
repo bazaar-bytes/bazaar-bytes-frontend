@@ -14,7 +14,7 @@ export const ProductCard = ({ product, isPublic }) => {
           />
         </figure>
         <div className="card-body text-left px-4 py-2 ">
-          <h3 className="card-title text-sm leading-none text-gray-600">
+          <h3 className="card-title text-sm leading-none text-gray-600 dark:text-gray-400">
             {name}
           </h3>
           <p className="text-sm font-bold leading-none">€{price}</p>

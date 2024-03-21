@@ -93,7 +93,7 @@ export const AddProductPage = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h3 className="text-2xl font-semibold text-gray-700 mb-6 sticky left-0">
+        <h3 className="text-2xl font-semibold text-gray-700 mb-6 sticky left-0 dark:text-gray-400">
           Add product
         </h3>
         <div className="flex flex-col gap-3">

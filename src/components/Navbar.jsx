@@ -94,7 +94,7 @@ export const Navbar = () => {
                 </div>
               </div>
               <div className="flex">
-                <div className="dropdown dropdown-end">
+                <div className="dropdown dropdown-end ">
                   <div
                     tabIndex={0}
                     role="button"
@@ -109,7 +109,7 @@ export const Navbar = () => {
                   </div>
                   <ul
                     tabIndex={0}
-                    className="text-black menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                    className="text-black menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 dark:text-gray-400"
                   >
                     <li>
                       <Link to="/my-dashboard" className="justify-between ">
