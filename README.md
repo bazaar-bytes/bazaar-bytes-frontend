@@ -16,9 +16,6 @@
 - sign up on stripe to get the env variable for the payment checkout
 - sign up on cloudinary to upload your pictures
 
-## Demo
-
-Find our app here:[BazaarBytes](https://bazaar-bytes.netlify.app)
 
 ### Link to the backend part
 [BazaarBytes_Backend](https://github.com/bazaar-bytes/bazaar-bytes-backend)
